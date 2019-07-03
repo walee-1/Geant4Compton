@@ -1,0 +1,117 @@
+#include "G4VUserDetectorConstruction.hh"
+#include "G4NistManager.hh"
+#include "G4Box.hh"
+#include "G4PVPlacement.hh"
+#include "G4LogicalVolume.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+#include "detector.hh"
+
+DetectorGeom::DetectorGeom():G4VUserDetectorConstruction(){} //constructor
+
+DetectorGeom::~DetectorGeom(){} //virtual destructor
+
+G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymorphism
+
+
+	{
+		G4NistManager* nist = G4NistManager::Instance();
+		
+		//materials for world and target and whatever else, galactic is vacuum
+		G4Material* Si=nist->FindOrBuildMaterial("G4_Si");
+		G4Material* vac=nist->FindOrBuildMaterial("G4_Galactic"); //space to be exact
+		G4Material* Al=nist->FindOrBuildMaterial("G4_Al");
+
+		//new vacuum definition
+		// G4Material* air=G4Material::GetMaterial("G4_AIR");
+		// G4double density=10.e-15*g/cm3;
+		// G4double pressure=10.e-15*bar;
+		// G4double temperature=295*kelvin;
+		// G4int ncomponents;
+		// G4double fractionmass;
+
+		// G4Material* vacuum10=new G4Material("Vacuum10",density,ncomponents=1,kStateGas,temperature,pressure);
+
+		// vacuum10->AddMaterial(air,fractionmass=1.);
+
+
+
+		
+		//define the world solize, 1x1x1 in my case
+		G4double world_sizeX=5./2.*m;
+		G4double world_sizeY=5./2.*m;
+		G4double world_sizeZ=5./2.*m;
+		G4cout<<world_sizeX;
+		//creates the shape of the world, which in this case is a square box of 1x1x1
+		G4Box* solidWorld=new G4Box("World", //name of the shape of the world
+									world_sizeX,world_sizeY,world_sizeZ); //size of the world (size is halfed because this is in one axis, 
+																			//the center expands on both axis)
+		
+		//creates the world's physical volume by attaching a material to it etc.
+		G4LogicalVolume* logicWorld=new G4LogicalVolume(solidWorld, //its shape
+										vac, //its material
+										"myWorld"); //name of the world
+		logicWorld->SetVisAttributes(G4VisAttributes::Invisible); //sets the world invisible
+		
+		G4VPhysicalVolume* physWorld=new G4PVPlacement(0, //rotation
+											G4ThreeVector(), //initial placement of the center
+											logicWorld, //logical volume
+											"World", //name 
+											0, //mother volume
+											false, //boolean operations
+											0, //copy numner
+											true); //check overlap
+		//G4VPhysicalVolume* physWorld=newG4PVPlacement(no rotation, at origin, logical volume it is in, name, mother volume, no boolean operation, copy number, overlaps checking);
+		
+		//shape of the target to fire particles at
+		G4double target_sizeX=10./2.*cm;
+		G4double target_sizeY=10./2.*cm;
+		G4double target_sizeZ=300./2.*um;
+		G4Box* solidTarget=new G4Box("Target",target_sizeX,target_sizeY,target_sizeZ);
+		
+		//create the target logical volume by assigning a material to it
+		G4LogicalVolume* logicTargetSi=new G4LogicalVolume(solidTarget,Si,"detectorSi");
+
+		G4VisAttributes* siAtt=new G4VisAttributes(G4Colour(1.,0.,0.));
+		logicTargetSi->SetVisAttributes(siAtt);
+
+		
+		//Al
+		G4double target_sizeXAl=target_sizeX;
+		G4double target_sizeYAl=target_sizeY;
+		G4double target_sizeZAl=100./2.*nm;
+		G4Box* solidTargetAl=new G4Box("Target2",target_sizeXAl,target_sizeYAl,target_sizeZAl);
+		G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"detectorAl");
+
+		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.,0.,1.));
+		logicTargetAl->SetVisAttributes(alAtt);
+		
+		
+		//Place the detector (target logical volume) inside the world
+		new G4PVPlacement(0,
+						G4ThreeVector(),
+						logicTargetSi,
+						"Silicon",
+						logicWorld,
+						false,
+						0,
+						true);
+		new G4PVPlacement(0,
+							G4ThreeVector(0,0,-150.1*um),
+							logicTargetAl,
+							"Aluminium",
+							logicWorld,
+							false,
+							0,
+							true);
+		return physWorld;
+		
+	}
+
+
+
+
+
+
