@@ -34,3 +34,8 @@
 #folders
 build/
 bin/
+
+*.root
+*.log
+*.so
+*~
