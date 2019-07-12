@@ -8,6 +8,8 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "detector.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4SDManager.hh"
 
 DetectorGeom::DetectorGeom():G4VUserDetectorConstruction(){} //constructor
 
@@ -88,7 +90,14 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.,0.,1.));
 		logicTargetAl->SetVisAttributes(alAtt);
 		
-		
+		//G4VSensitiveDetector* sensitiveBox=new MySensitiveDetector("/MyDetector");
+
+		// G4SDManager* pSDManager=G4SDManager::GetSDMpointer();
+		// pSDManager->AddNewDetector(sensitiveBox);
+		// logicTargetSi->SetSensitiveDetector(sensitiveBox);
+
+
+
 		//Place the detector (target logical volume) inside the world
 		new G4PVPlacement(0,
 						G4ThreeVector(),
@@ -106,6 +115,8 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 							false,
 							0,
 							true);
+
+	
 		return physWorld;
 		
 	}

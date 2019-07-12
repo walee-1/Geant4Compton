@@ -23,11 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/src/PhysicsList.cc
-/// \brief Implementation of the PhysicsList class
-//
-//
-// $Id: PhysicsList.cc 68024 2013-03-13 13:42:01Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -72,10 +67,10 @@ void PhysicsList::ConstructProcess()
   
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
 
-  
-  G4eIonisation* theIonisation = new G4eIonisation(); 
-  theIonisation->SetEmModel(new G4PenelopeIonisationModel()); 
-  pmanagerE->AddProcess(theIonisation,-1,1,1);
+  pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);
+  // G4eIonisation* theIonisation = new G4eIonisation(); 
+  // theIonisation->SetEmModel(new G4PenelopeIonisationModel()); 
+  // pmanagerE->AddProcess(theIonisation,-1,1,1);
   // G4eBremsstrahlung* bremy=new G4eBremsstrahlung();
   // bremy->SetEmModel(new G4PenelopeBremsstrahlungModel());
   // pmanagerE->AddProcess(bremy,-1,1,1);

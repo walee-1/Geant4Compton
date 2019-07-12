@@ -1,15 +1,16 @@
 #include "detector.hh"
-//#include "particle_gun.hh"
+//#include "particle_gun.hh" //if you want to use a particle gun directly 
 #include "G4RunManager.hh"
-//#include "QBBC.hh"
+//#include "QBBC.hh" //physics list
 #include "physicsList.hh"
-//#include "Randomize.hh"
+//#include "Randomize.hh"  //random number generator
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
-//#include "G4UIterminal.hh"
-//#include "G4MTRunManager.hh"
-//#include "G4PhysListFactory.hh"
+//#include "G4UIterminal.hh" 
+//UI terminal control
+//#include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
+#include "G4PhysListFactory.hh"
 #include "N01PrimaryGeneratorAction.hh"
 
 int main(int argc, char** argv)
@@ -18,7 +19,7 @@ int main(int argc, char** argv)
 	if(argc==1){
 		ui=new G4UIExecutive(argc,argv);
 	}
-	   
+	//set up the run manager
 	G4RunManager* runManager= new G4RunManager;
 	//runManager->SetNumberOfThreads(1);
 
@@ -28,13 +29,14 @@ int main(int argc, char** argv)
 	
 	//physics initialization && physics list 
 	//G4VModularPhysicsList* physicsList=new QBBC;
-	// G4PhysListFactory factory;
-	// G4VModularPhysicsList* physList=factory.ReferencePhysList();
-	G4VUserPhysicsList* physics = new PhysicsList;
-	runManager->SetUserInitialization(physics);
-	
+	G4PhysListFactory factory;
+	G4VModularPhysicsList* physList=factory.ReferencePhysList();
+	//G4VUserPhysicsList* physics = new PhysicsList;
+	//runManager->SetUserInitialization(physics);
+	runManager->SetUserInitialization(physList);
 	//particle source initialization
 
+	//Primary Generator Action
 	G4VUserPrimaryGeneratorAction* myAction=new N01PrimaryGeneratorAction;
 	runManager->SetUserAction(myAction);
 	
@@ -44,18 +46,19 @@ int main(int argc, char** argv)
 	G4VisManager* visManager = new G4VisExecutive;
 	visManager->Initialize();
 	G4UImanager* UImanager= G4UImanager::GetUIpointer();
-
+	//if you send a command with the execution of the binary
 	if(!ui){
 		G4String command="/control/execute ";
 		G4String fileName=argv[1];
 		UImanager->ApplyCommand(command+fileName);
 	}
+	//if you can just want to use vis.mac
 	else {
 		UImanager->ApplyCommand("/control/execute init_vis.mac");
 		ui->SessionStart();
 		delete ui;
 	}
-
+	//free up memory
 	delete runManager;
 	return 0;
 
