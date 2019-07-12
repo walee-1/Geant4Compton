@@ -34,6 +34,7 @@
 #folders
 build/
 bin/
+.vscode/
 
 *.root
 *.log
