@@ -44,9 +44,9 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,9 +65,6 @@ physicsList::~physicsList()
 
 void physicsList::ConstructParticle()
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
   
 // gamma
   G4Gamma::GammaDefinition();
@@ -75,21 +72,11 @@ void physicsList::ConstructParticle()
 // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
 
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
-// mesons
-  G4MesonConstructor mConstructor;
-  mConstructor.ConstructParticle();
+// Protons
+  G4Proton::ProtonDefinition();
 
-// barions
-  G4BaryonConstructor bConstructor;
-  bConstructor.ConstructParticle();
 
 // ions
   G4IonConstructor iConstructor;
