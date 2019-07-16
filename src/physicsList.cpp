@@ -30,44 +30,89 @@
 #include "physicsList.hh"
 #include "G4ParticleTypes.hh"
 #include "G4SystemOfUnits.hh"
-
+#include <G4ParticleDefinition.hh>
+#include <G4RegionStore.hh>
 
 #include "G4StepLimiter.hh"
 #include "G4UserSpecialCuts.hh"
+#include "G4ProcessManager.hh"
+
 #include "G4EmPenelopePhysics.hh"
 #include "G4PenelopeIonisationModel.hh"
 #include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-#include "G4ProcessManager.hh"
+
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList()
+physicsList::physicsList()
 : G4VUserPhysicsList()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructParticle()
 {
+ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+physicsList::~physicsList()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void physicsList::ConstructParticle()
+{
+  // pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+  
+// gamma
+  G4Gamma::GammaDefinition();
+  
+// leptons
   G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+
+// mesons
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
+
+// barions
+  G4BaryonConstructor bConstructor;
+  bConstructor.ConstructParticle();
+
+// ions
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle();
+
+
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructProcess()
+void physicsList::ConstructProcess()
 {
   AddTransportation();
-  
+  G4StepLimiter* stepLimiter=new G4StepLimiter();
+  G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
+  emPhys->ConstructProcess();
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
-
-  pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);
+ 
+  pmanagerE->AddDiscreteProcess(stepLimiter);
+  
+  
+  //pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);
   // G4eIonisation* theIonisation = new G4eIonisation(); 
   // theIonisation->SetEmModel(new G4PenelopeIonisationModel()); 
   // pmanagerE->AddProcess(theIonisation,-1,1,1);
@@ -83,8 +128,9 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::SetCuts()
+void physicsList::SetCuts()
 {
+
 // default production thresholds for the world volume
   SetCutsWithDefault();
 

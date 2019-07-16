@@ -1,7 +1,6 @@
 #include "detector.hh"
 //#include "particle_gun.hh" //if you want to use a particle gun directly 
 #include "G4RunManager.hh"
-//#include "QBBC.hh" //physics list
 #include "physicsList.hh"
 //#include "Randomize.hh"  //random number generator
 #include "G4VisExecutive.hh"
@@ -10,7 +9,6 @@
 //#include "G4UIterminal.hh" 
 //UI terminal control
 //#include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
-#include "G4PhysListFactory.hh"
 #include "N01PrimaryGeneratorAction.hh"
 
 int main(int argc, char** argv)
@@ -29,11 +27,11 @@ int main(int argc, char** argv)
 	
 	//physics initialization && physics list 
 	//G4VModularPhysicsList* physicsList=new QBBC;
-	G4PhysListFactory factory;
-	G4VModularPhysicsList* physList=factory.ReferencePhysList();
-	//G4VUserPhysicsList* physics = new PhysicsList;
-	//runManager->SetUserInitialization(physics);
-	runManager->SetUserInitialization(physList);
+	//G4PhysListFactory factory;
+	//G4VModularPhysicsList* physList=factory.ReferencePhysList();
+	G4VUserPhysicsList* physics = new physicsList;
+	runManager->SetUserInitialization(physics);
+	//runManager->SetUserInitialization(physList);
 	//particle source initialization
 
 	//Primary Generator Action

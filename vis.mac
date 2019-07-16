@@ -7,5 +7,5 @@
 /vis/viewer/flush
 /vis/scene/add/trajectories smooth
 /vis/scene/endOfEventAction accumulate
-/run/beamOn 36
+/run/beamOn 1000
 exit

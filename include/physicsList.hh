@@ -40,11 +40,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VUserPhysicsList
+class physicsList: public G4VUserPhysicsList
 {
   public:
-    PhysicsList();
-   ~PhysicsList();
+    physicsList();
+   ~physicsList();
 
   protected:
     // Construct particle and physics
