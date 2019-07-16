@@ -44,11 +44,11 @@ target_link_libraries(test_example ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 # build particleGun. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(particleGun_SCRIPTS
-    particleGun.in plotHisto.C vis.mac
+set(visualization_SCRIPTS
+    vis.mac init_vis.mac vis2.mac
   )
 
-foreach(_script ${particleGun_SCRIPTS})
+foreach(_script ${visualization_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
@@ -60,41 +60,6 @@ endforeach()
 # example standalone
 #
 #----------------------------------------------------------------------------
-# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
+# Install the executable to 'build' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS test_example RUNTIME DESTINATION bin)
-
-#----------------------------------------------------------------------------
-# Copy all scripts to the build directory, i.e. the directory in which we
-# build B1. This is so that we can run the executable directly because it
-# relies on these scripts being in the current working directory.
-#
-#set(EXAMPLEB1_SCRIPTS
-#  exampleB1.in
- # exampleB1.out
-  #init_vis.mac
-  #run1.mac
- # run2.mac
-#  vis.mac
-#  )
-
-#foreach(_script ${EXAMPLEB1_SCRIPTS})
-  #configure_file(
-#    ${PROJECT_SOURCE_DIR}/${_script}
-  #  ${PROJECT_BINARY_DIR}/${_script}
- #   COPYONLY
- #   )
-#endforeach()
-
-#----------------------------------------------------------------------------
-# For internal Geant4 use - but has no effect if you build this
-# example standalone
-#
-#add_custom_target(B1 DEPENDS exampleB1)
-
-#----------------------------------------------------------------------------
-# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
-#
-
-
-
+install(TARGETS test_example RUNTIME DESTINATION build)
