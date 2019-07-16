@@ -4,21 +4,20 @@
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4RunManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "detector.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4SDManager.hh"
 
+#include "G4PhysicalVolumeStore.hh"
+
 DetectorGeom::DetectorGeom():G4VUserDetectorConstruction(){} //constructor
 
 DetectorGeom::~DetectorGeom(){} //virtual destructor
 
 G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymorphism
-
-
-	{
+{
 		G4NistManager* nist = G4NistManager::Instance();
 		
 		//materials for world and target and whatever else, galactic is vacuum
@@ -119,10 +118,22 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 	
 		return physWorld;
 		
-	}
+}
 
 
-
+void DetectorGeom::CheckOverLaps()
+{
+	G4PhysicalVolumeStore* thePVStore = G4PhysicalVolumeStore::GetInstance();
+	G4cout<<thePVStore->size()<<" physical volumes are defined"<<G4endl;
+	G4bool overlapFlag=false;
+	G4int res=1000;
+	G4double tol=0.;
+	for (size_t i=0;i<thePVStore->size();i++){
+		overlapFlag=(*thePVStore)[i]->CheckOverlaps(res,tol,true)|overlapFlag;
+		}
+	if(overlapFlag)
+	G4cout<<"Check: there are overlapping volumes"<<G4endl;
+}
 
 
 

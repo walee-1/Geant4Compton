@@ -13,6 +13,8 @@ public:
 	virtual ~DetectorGeom();
 	
 	virtual G4VPhysicalVolume* Construct();
+
+	void CheckOverLaps();
 	
 };
 #endif
