@@ -84,8 +84,8 @@ void physicsList::ConstructParticle()
   bConsctructor.ConstructParticle();
 
 //meson constructor, used only to avoid warnings as before
-  G4MesonConstructor mesoConstructor;
-  mesoConstructor.ConstructParticle();
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
   
 
 
