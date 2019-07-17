@@ -9,7 +9,7 @@
 #include "detector.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4SDManager.hh"
-
+#include "TrackerSD.hh"
 #include "G4PhysicalVolumeStore.hh"
 
 DetectorGeom::DetectorGeom():G4VUserDetectorConstruction(){} //constructor
@@ -72,7 +72,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4Box* solidTarget=new G4Box("TargetSi",target_sizeX,target_sizeY,target_sizeZ);
 		
 		//create the target logical volume by assigning a material to it
-		G4LogicalVolume* logicTargetSi=new G4LogicalVolume(solidTarget,Si,"detectorSi");
+		G4LogicalVolume* logicTargetSi=new G4LogicalVolume(solidTarget,Si,"LogicalDetectorSi");
 
 		//give a name to the region of the Silicon detector for setting production cuts, you call whatever string you pass in G4Region.
 		G4Region* detectorSi=new G4Region("detectorSi");
@@ -80,6 +80,14 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 
 		G4VisAttributes* siAtt=new G4VisAttributes(G4Colour(0.,0.,1.));//just for visualization purposes, rgb code
 		logicTargetSi->SetVisAttributes(siAtt); //set the color to some logical volume
+
+
+		//still under investigation and coding routine, not final AT ALL! 
+		G4String trackerChamberSDname="/Silicon";
+		TrackerSD* sensitive=new TrackerSD(trackerChamberSDname,"TrackerHitsCollection");
+		G4SDManager* sdman = G4SDManager::GetSDMpointer();
+		sdman->AddNewDetector(sensitive);
+		SetSensitiveDetector("LogicalDetectorSi",sensitive,true);
 
 		
 		//Al

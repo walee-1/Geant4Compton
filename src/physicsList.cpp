@@ -110,6 +110,14 @@ void physicsList::ConstructProcess()
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
   
   pmanagerE->AddDiscreteProcess(stepLimiter);
+
+  // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
+  // pmanagerE->AddProcess(multiscattering,ordInActive,1,1);
+
+  // G4eIonisation* ioniz=new G4eIonisation();
+  // ioniz->SetEmModel(new G4PenelopeIonisationModel());
+  // pmanagerE->AddProcess(ioniz,ordInActive,2,2);
+
   
   // //for protons
 
