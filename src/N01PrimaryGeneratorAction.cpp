@@ -5,7 +5,7 @@
 #include "G4Electron.hh"
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
-
+#include "G4Proton.hh"
 
 N01PrimaryGeneratorAction::N01PrimaryGeneratorAction() 
 {
@@ -14,7 +14,12 @@ N01PrimaryGeneratorAction::N01PrimaryGeneratorAction()
 
     particleGun->SetParticleDefinition(G4Electron::ElectronDefinition());
     particleGun->SetParticleEnergy(700*keV);
-    particleGun->SetParticlePosition(G4ThreeVector(0,0,-10*mm));
+    particleGun->SetParticlePosition(G4ThreeVector(0,0,-100.*mm));
+
+    // //for protons
+    // particleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
+    // particleGun->SetParticleEnergy(15.1*keV);
+    // particleGun->SetParticlePosition(G4ThreeVector(0,0,-100.*mm));
 
 }
 

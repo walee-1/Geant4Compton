@@ -104,10 +104,20 @@ void physicsList::ConstructProcess()
   G4StepLimiter* stepLimiter=new G4StepLimiter();
   G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
   emPhys->ConstructProcess();
+
+  //for electrons
+
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+  
   pmanagerE->AddDiscreteProcess(stepLimiter);
   
+  // //for protons
+
+  // G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
+  // pmanagerP->AddDiscreteProcess(stepLimiter);
   
+  //attempts at adding processes one by one instead of loading in the whole physics package
+
   //pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);
   // G4eIonisation* theIonisation = new G4eIonisation(); 
   // theIonisation->SetEmModel(new G4PenelopeIonisationModel()); 
@@ -140,7 +150,7 @@ void physicsList::SetCuts()
 
   
 
-  regName="detectorSilicon";
+  regName="detectorSi";
   region=G4RegionStore::GetInstance()->GetRegion(regName); 
   cuts= new G4ProductionCuts;
   cuts->SetProductionCut(10*nm);

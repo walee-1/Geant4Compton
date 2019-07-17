@@ -46,7 +46,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4double world_sizeZ=5./2.*m;
 		G4cout<<world_sizeX;
 		//creates the shape of the world, which in this case is a square box of 1x1x1
-		G4Box* solidWorld=new G4Box("World", //name of the shape of the world
+		G4Box* solidWorld=new G4Box("WorldBox", //name of the shape of the world
 									world_sizeX,world_sizeY,world_sizeZ); //size of the world (size is halfed because this is in one axis, 
 																			//the center expands on both axis)
 		
@@ -69,16 +69,16 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4double target_sizeX=10./2.*cm;
 		G4double target_sizeY=10./2.*cm;
 		G4double target_sizeZ=300./2.*um;
-		G4Box* solidTarget=new G4Box("Target",target_sizeX,target_sizeY,target_sizeZ);
+		G4Box* solidTarget=new G4Box("TargetSi",target_sizeX,target_sizeY,target_sizeZ);
 		
 		//create the target logical volume by assigning a material to it
 		G4LogicalVolume* logicTargetSi=new G4LogicalVolume(solidTarget,Si,"detectorSi");
 
 		//give a name to the region of the Silicon detector for setting production cuts, you call whatever string you pass in G4Region.
-		G4Region* detectorSilicon=new G4Region("detectorSilicon");
-		detectorSilicon->AddRootLogicalVolume(logicTargetSi);//attach a logical volume to the region.
+		G4Region* detectorSi=new G4Region("detectorSi");
+		detectorSi->AddRootLogicalVolume(logicTargetSi);//attach a logical volume to the region.
 
-		G4VisAttributes* siAtt=new G4VisAttributes(G4Colour(1.,0.,0.));//just for visualization purposes, rgb code
+		G4VisAttributes* siAtt=new G4VisAttributes(G4Colour(0.,0.,1.));//just for visualization purposes, rgb code
 		logicTargetSi->SetVisAttributes(siAtt); //set the color to some logical volume
 
 		
@@ -86,11 +86,11 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4double target_sizeXAl=target_sizeX;
 		G4double target_sizeYAl=target_sizeY;
 		G4double target_sizeZAl=100./2.*nm;
-		G4Box* solidTargetAl=new G4Box("Target2",target_sizeXAl,target_sizeYAl,target_sizeZAl);
+		G4Box* solidTargetAl=new G4Box("TargetAl",target_sizeXAl,target_sizeYAl,target_sizeZAl);
 		G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"detectorAl");
 
 		//this makes the detector pretty.
-		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.,0.,1.));
+		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.75,0.75,0.75));
 		logicTargetAl->SetVisAttributes(alAtt);
 
 		//give a name to the region of the aluminum detector for setting production cuts
@@ -115,13 +115,13 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 						0,
 						true);
 		new G4PVPlacement(0,
-							G4ThreeVector(0,0,-150.05*um),
-							logicTargetAl,
-							"Aluminium",
-							logicWorld,
-							false,
-							0,
-							true);
+						G4ThreeVector(0,0,-150.05*um), //since the al is 100nm, and things are placed in the center, 300/2+100/2
+						logicTargetAl,
+						"Aluminium",
+						logicWorld,
+						false,
+						0,
+						true);
 
 	
 		return physWorld;
