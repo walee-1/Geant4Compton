@@ -107,7 +107,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 						0,
 						true);
 		new G4PVPlacement(0,
-							G4ThreeVector(0,0,-150.1*um),
+							G4ThreeVector(0,0,-150.05*um),
 							logicTargetAl,
 							"Aluminium",
 							logicWorld,

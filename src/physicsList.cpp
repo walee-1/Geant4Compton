@@ -43,8 +43,9 @@
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4MesonConstructor.hh"
 
 
 
@@ -78,7 +79,17 @@ void physicsList::ConstructParticle()
   G4Proton::ProtonDefinition();
 
 
-// ions
+//baryon constructor //to avoid warnings
+  G4BaryonConstructor bConsctructor;
+  bConsctructor.ConstructParticle();
+
+//meson constructor, used only to avoid warnings as before
+  G4MesonConstructor mesoConstructor;
+  mesoConstructor.ConstructParticle();
+  
+
+
+// ions - need this for obvious reasons
   G4IonConstructor iConstructor;
   iConstructor.ConstructParticle();
 

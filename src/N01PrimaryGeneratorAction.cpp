@@ -13,7 +13,7 @@ N01PrimaryGeneratorAction::N01PrimaryGeneratorAction()
     particleGun=new G4ParticleGun(n_particle);
 
     particleGun->SetParticleDefinition(G4Electron::ElectronDefinition());
-    particleGun->SetParticleEnergy(700*MeV);
+    particleGun->SetParticleEnergy(700*keV);
     particleGun->SetParticlePosition(G4ThreeVector(0,0,-10*mm));
 
 }
