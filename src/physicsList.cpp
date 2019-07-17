@@ -37,6 +37,7 @@
 #include "G4UserSpecialCuts.hh"
 #include "G4ProcessManager.hh"
 
+
 #include "G4EmPenelopePhysics.hh"
 #include "G4PenelopeIonisationModel.hh"
 #include "G4PenelopeBremsstrahlungModel.hh"
@@ -93,8 +94,6 @@ void physicsList::ConstructParticle()
   G4IonConstructor iConstructor;
   iConstructor.ConstructParticle();
 
-
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,7 +105,6 @@ void physicsList::ConstructProcess()
   G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
   emPhys->ConstructProcess();
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
- 
   pmanagerE->AddDiscreteProcess(stepLimiter);
   
   
@@ -129,27 +127,30 @@ void physicsList::ConstructProcess()
 void physicsList::SetCuts()
 {
 
-// default production thresholds for the world volume
-  SetCutsWithDefault();
+  // default production thresholds for the world volume
+  //SetCutsWithDefault();
+  //set different than default thresholds for the world volume
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV,1*MeV);
+  //SetCutValue(10*nm,"e-");
+  
+  //go over each region as defined in detector.cpp and assign different cuts according to your requirement.
+  G4Region* region;
+  G4String regName;
+  G4ProductionCuts* cuts;
 
-  // Production thresholds for detector regions
-//   G4Region* Perkeo;
-// //   G4String regName;
-//   G4ProductionCuts* cuts;
-// 
-// //   regName = "Perkeo";
-// //   region = G4RegionStore::GetInstance()->GetRegion(regName);
-//   cuts = new G4ProductionCuts;
-//   cuts->SetProductionCut(0.1*mm); // same cuts for gamma, e- and e+
-//   Perkeo->SetProductionCuts(cuts);
+  
 
-//   regName = "calorimeter";
-//   region = G4RegionStore::GetInstance()->GetRegion(regName);
-//   cuts = new G4ProductionCuts;
-//   cuts->SetProductionCut(0.01*mm,G4ProductionCuts::GetIndex("gamma"));
-//   cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("e-"));
-//   cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("e+"));
-//   region->SetProductionCuts(cuts);
+  regName="detectorSilicon";
+  region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  cuts= new G4ProductionCuts;
+  cuts->SetProductionCut(10*nm);
+  region->SetProductionCuts(cuts);
+
+  regName="detectorAl";
+  region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  cuts= new G4ProductionCuts;
+  cuts->SetProductionCut(100*nm);
+  region->SetProductionCuts(cuts);
 
 }
 
