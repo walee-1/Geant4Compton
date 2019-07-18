@@ -72,7 +72,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4Box* solidTarget=new G4Box("TargetSi",target_sizeX,target_sizeY,target_sizeZ);
 		
 		//create the target logical volume by assigning a material to it
-		G4LogicalVolume* logicTargetSi=new G4LogicalVolume(solidTarget,Si,"LogicalDetectorSi");
+		G4LogicalVolume* logicTargetSi=new G4LogicalVolume(solidTarget,Si,"LogicalVolumeSi");
 
 		//give a name to the region of the Silicon detector for setting production cuts, you call whatever string you pass in G4Region.
 		G4Region* detectorSi=new G4Region("detectorSi");
@@ -87,7 +87,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		TrackerSD* sensitive=new TrackerSD(trackerChamberSDname,"TrackerHitsCollection");
 		G4SDManager* sdman = G4SDManager::GetSDMpointer();
 		sdman->AddNewDetector(sensitive);
-		SetSensitiveDetector("LogicalDetectorSi",sensitive,true);
+		SetSensitiveDetector("LogicalVolumeSi",sensitive,true);
 
 		
 		//Al
@@ -95,7 +95,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		G4double target_sizeYAl=target_sizeY;
 		G4double target_sizeZAl=100./2.*nm;
 		G4Box* solidTargetAl=new G4Box("TargetAl",target_sizeXAl,target_sizeYAl,target_sizeZAl);
-		G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"detectorAl");
+		G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"LogicalVolumeAl");
 
 		//this makes the detector pretty.
 		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.75,0.75,0.75));

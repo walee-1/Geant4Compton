@@ -61,7 +61,7 @@ void TrackerHit::Draw()
     G4Circle circle(fPos);
     circle.SetScreenSize(4.);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour colour(0.,1.,0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -74,7 +74,7 @@ void TrackerHit::Print()
 {
   G4cout
      << "  trackID: " << fTrackID << " chamberNb: " << fChamberNb
-     << "Edep: "
+     << " Edep: "
      << std::setw(7) << G4BestUnit(fEdep,"Energy")
      << " Position: "
      << std::setw(7) << G4BestUnit( fPos,"Length")

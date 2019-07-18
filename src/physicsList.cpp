@@ -108,6 +108,10 @@ void physicsList::ConstructProcess()
   //for electrons
 
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+
+  // //for protons
+
+  // G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
   
   pmanagerE->AddDiscreteProcess(stepLimiter);
 
@@ -118,11 +122,6 @@ void physicsList::ConstructProcess()
   // ioniz->SetEmModel(new G4PenelopeIonisationModel());
   // pmanagerE->AddProcess(ioniz,ordInActive,2,2);
 
-  
-  // //for protons
-
-  // G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
-  // pmanagerP->AddDiscreteProcess(stepLimiter);
   
   //attempts at adding processes one by one instead of loading in the whole physics package
 
@@ -135,9 +134,6 @@ void physicsList::ConstructProcess()
   // pmanagerE->AddProcess(bremy,-1,1,1);
   // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
   // pmanagerE->AddProcess(multiscattering,-1,1,1);
-
-  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,20 +151,19 @@ void physicsList::SetCuts()
   G4Region* region;
   G4String regName;
   G4ProductionCuts* cuts;
-
   
 
   regName="detectorSi";
   region=G4RegionStore::GetInstance()->GetRegion(regName); 
   cuts= new G4ProductionCuts;
-  cuts->SetProductionCut(10*nm);
+  cuts->SetProductionCut(0.1*um);
   region->SetProductionCuts(cuts);
 
-  regName="detectorAl";
-  region=G4RegionStore::GetInstance()->GetRegion(regName); 
-  cuts= new G4ProductionCuts;
-  cuts->SetProductionCut(100*nm);
-  region->SetProductionCuts(cuts);
+  // regName="detectorAl";
+  // region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  // cuts= new G4ProductionCuts;
+  // cuts->SetProductionCut(100*nm);//this has a direct impact on the speed of calculation and how many steps are displayed later on
+  // region->SetProductionCuts(cuts);
 
 }
 
