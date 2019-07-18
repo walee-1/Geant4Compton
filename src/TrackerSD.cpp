@@ -10,6 +10,8 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 
+#include "file.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackerSD::TrackerSD(const G4String& name,
@@ -63,6 +65,8 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   newHit->Print();
   //newHit->Draw();
+  newHit->Write();
+
 
   return true;
 }
@@ -71,7 +75,7 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
 void TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
-  if ( verboseLevel>1 ) { 
+  if ( verboseLevel>0 ) { 
      G4int nofHits = fHitsCollection->entries();
      G4cout << G4endl
             << "-------->Hits Collection: in this event they are " << nofHits 

@@ -1,12 +1,17 @@
 #include "G4VUserDetectorConstruction.hh"
+#include "detector.hh"
+
 #include "G4NistManager.hh"
+#include "G4Material.hh"
+
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "detector.hh"
+
 #include "G4VSensitiveDetector.hh"
 #include "G4SDManager.hh"
 #include "TrackerSD.hh"
@@ -22,20 +27,22 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		
 		//materials for world and target and whatever else, galactic is vacuum
 		G4Material* Si=nist->FindOrBuildMaterial("G4_Si");
-		G4Material* vac=nist->FindOrBuildMaterial("G4_Galactic"); //space to be exact
 		G4Material* Al=nist->FindOrBuildMaterial("G4_Al");
+
+		G4Material* vac=nist->FindOrBuildMaterial("G4_Galactic"); //space to be exact
+
 
 		//new vacuum definition
 		// G4Material* air=G4Material::GetMaterial("G4_AIR");
 		// G4double density=10.e-15*g/cm3;
 		// G4double pressure=10.e-15*bar;
-		// G4double temperature=295*kelvin;
-		// G4int ncomponents;
-		// G4double fractionmass;
+		// G4double temperature=295.*kelvin;
+		// G4int ncomponents=1.;
+		// G4double fractionmass=1.;
 
-		// G4Material* vacuum10=new G4Material("Vacuum10",density,ncomponents=1,kStateGas,temperature,pressure);
+		// G4Material* vac=new G4Material("Vac",density,ncomponents,kStateGas,temperature,pressure);
 
-		// vacuum10->AddMaterial(air,fractionmass=1.);
+		// vac->AddMaterial(air,fractionmass);
 
 
 
@@ -104,12 +111,6 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		//give a name to the region of the aluminum detector for setting production cuts
 		G4Region* detectorAl=new G4Region("detectorAl");
 		detectorAl->AddRootLogicalVolume(logicTargetAl);
-		
-		//G4VSensitiveDetector* sensitiveBox=new MySensitiveDetector("/MyDetector");
-
-		// G4SDManager* pSDManager=G4SDManager::GetSDMpointer();
-		// pSDManager->AddNewDetector(sensitiveBox);
-		// logicTargetSi->SetSensitiveDetector(sensitiveBox);
 
 
 

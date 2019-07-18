@@ -6,6 +6,8 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 #include "tls.hh"
+#include <fstream>
+#include <iostream>
 
 /// Tracker hit class
 ///
@@ -30,6 +32,7 @@ class TrackerHit : public G4VHit
     // methods from base class
     virtual void Draw();
     virtual void Print();
+    virtual void Write();
 
     // Set methods
     void SetTrackID  (G4int track)      { fTrackID = track; };
@@ -49,6 +52,7 @@ class TrackerHit : public G4VHit
       G4int         fChamberNb;
       G4double      fEdep;
       G4ThreeVector fPos;
+      std::ofstream myFile;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

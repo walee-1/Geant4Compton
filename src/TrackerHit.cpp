@@ -5,7 +5,13 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
+
 #include <iomanip>
+
+#include "file.hh"
+
+
+using namespace std;
 
 G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator=0;
 
@@ -15,11 +21,13 @@ TrackerHit::TrackerHit()
  : G4VHit(),
    fEdep(0.),
    fPos(G4ThreeVector())
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackerHit::~TrackerHit() {}
+TrackerHit::~TrackerHit() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,6 +87,22 @@ void TrackerHit::Print()
      << " Position: "
      << std::setw(7) << G4BestUnit( fPos,"Length")
      << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TrackerHit::Write()
+{ 
+  file* thisFile=new file();
+  if(thisFile->myFile.is_open()){
+    thisFile->myFile<< "  trackID: " << fTrackID << " chamberNb: " << fChamberNb
+     << " Edep: "
+     << std::setw(7) << G4BestUnit(fEdep,"Energy")
+     << " Position: "
+     << std::setw(7) << G4BestUnit( fPos,"Length")
+     << G4endl;
+  }
+  thisFile->~file();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
