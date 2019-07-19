@@ -16,7 +16,7 @@ RunAction::RunAction(): G4UserRunAction()
     
   // Creating histograms
   //
-  analysisManager->CreateH1("1","energy (eV) deposited",70.,0.,70.);
+  analysisManager->CreateH1("1","energy (eV) deposited",70.,0.,70000.);
   analysisManager->CreateH1("2","energy deposited per particle",1000,0.,1000.);
 }
 
