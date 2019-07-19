@@ -5,7 +5,7 @@
 #include "G4UImanager.hh"
 //#include "G4UIterminal.hh" 
 //UI terminal control
-//#include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
+#include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
 
 
 #include "PrimaryGeneratorAction.hh"
@@ -31,8 +31,8 @@ int main(int argc, char** argv)
 		ui=new G4UIExecutive(argc,argv);
 	}
 	//set up the run manager
-	G4RunManager* runManager= new G4RunManager;
-	//runManager->SetNumberOfThreads(1);
+	G4MTRunManager* runManager= new G4MTRunManager;
+	runManager->SetNumberOfThreads(4);
 
 	//detector construction
 	DetectorGeom* detector=new DetectorGeom();

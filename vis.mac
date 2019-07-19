@@ -12,8 +12,7 @@
 /vis/scene/add/trajectories rich
 /vis/modeling/trajectories/create/drawByParticleID
 /vis/modeling/trajectories/drawByParticleID-0/set e- red
-/vis/scene/endOfEventAction accumulate
 /vis/scene/endOfEventAction accumulate 10
 /vis/verbose warnings
-/run/beamOn 1000
+/run/beamOn 50000
 exit
