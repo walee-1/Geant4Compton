@@ -37,7 +37,10 @@
 #include "G4UserSpecialCuts.hh"
 #include "G4ProcessManager.hh"
 
+<<<<<<< HEAD
 #include "G4EmLivermorePhysics.hh"
+=======
+>>>>>>> 2cd52cef477b615c6c12ee94aa7c54be0fdc6330
 
 #include "G4EmPenelopePhysics.hh"
 #include "G4PenelopeIonisationModel.hh"
@@ -45,8 +48,9 @@
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4MesonConstructor.hh"
 
 #include "G4Proton.hh"
 
@@ -80,12 +84,20 @@ void physicsList::ConstructParticle()
   G4Proton::ProtonDefinition();
 
 
-// ions
+//baryon constructor //to avoid warnings
+  G4BaryonConstructor bConsctructor;
+  bConsctructor.ConstructParticle();
+
+//meson constructor, used only to avoid warnings as before
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
+  
+
+
+// ions - need this for obvious reasons
   G4IonConstructor iConstructor;
   iConstructor.ConstructParticle();
 
-
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,14 +109,36 @@ void physicsList::ConstructProcess()
   G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
   G4EmLivermorePhysics* emPhys2=new G4EmLivermorePhysics();
   emPhys->ConstructProcess();
+<<<<<<< HEAD
   emPhys2->ConstructProcess();
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
   //G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager();
  
   pmanagerE->AddDiscreteProcess(stepLimiter);
   //pmanagerP->AddDiscreteProcess(stepLimiter);
+=======
+
+  //for electrons
+
+  G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+
+  // //for protons
+
+  // G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
+>>>>>>> 2cd52cef477b615c6c12ee94aa7c54be0fdc6330
   
+  pmanagerE->AddDiscreteProcess(stepLimiter);
+
+  // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
+  // pmanagerE->AddProcess(multiscattering,ordInActive,1,1);
+
+  // G4eIonisation* ioniz=new G4eIonisation();
+  // ioniz->SetEmModel(new G4PenelopeIonisationModel());
+  // pmanagerE->AddProcess(ioniz,ordInActive,2,2);
+
   
+  //attempts at adding processes one by one instead of loading in the whole physics package
+
   //pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);
   // G4eIonisation* theIonisation = new G4eIonisation(); 
   // theIonisation->SetEmModel(new G4PenelopeIonisationModel()); 
@@ -114,9 +148,6 @@ void physicsList::ConstructProcess()
   // pmanagerE->AddProcess(bremy,-1,1,1);
   // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
   // pmanagerE->AddProcess(multiscattering,-1,1,1);
-
-  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,27 +155,29 @@ void physicsList::ConstructProcess()
 void physicsList::SetCuts()
 {
 
-// default production thresholds for the world volume
-  SetCutsWithDefault();
+  // default production thresholds for the world volume
+  //SetCutsWithDefault();
+  //set different than default thresholds for the world volume
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV,1*MeV);
+  //SetCutValue(10*nm,"e-");
+  
+  //go over each region as defined in detector.cpp and assign different cuts according to your requirement.
+  G4Region* region;
+  G4String regName;
+  G4ProductionCuts* cuts;
+  
 
-  // Production thresholds for detector regions
-//   G4Region* Perkeo;
-// //   G4String regName;
-//   G4ProductionCuts* cuts;
-// 
-// //   regName = "Perkeo";
-// //   region = G4RegionStore::GetInstance()->GetRegion(regName);
-//   cuts = new G4ProductionCuts;
-//   cuts->SetProductionCut(0.1*mm); // same cuts for gamma, e- and e+
-//   Perkeo->SetProductionCuts(cuts);
+  regName="detectorSi";
+  region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  cuts= new G4ProductionCuts;
+  cuts->SetProductionCut(0.1*um);
+  region->SetProductionCuts(cuts);
 
-//   regName = "calorimeter";
-//   region = G4RegionStore::GetInstance()->GetRegion(regName);
-//   cuts = new G4ProductionCuts;
-//   cuts->SetProductionCut(0.01*mm,G4ProductionCuts::GetIndex("gamma"));
-//   cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("e-"));
-//   cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("e+"));
-//   region->SetProductionCuts(cuts);
+  // regName="detectorAl";
+  // region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  // cuts= new G4ProductionCuts;
+  // cuts->SetProductionCut(100*nm);//this has a direct impact on the speed of calculation and how many steps are displayed later on
+  // region->SetProductionCuts(cuts);
 
 }
 

@@ -11,9 +11,17 @@
 //UI terminal control
 //#include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
 #include "N01PrimaryGeneratorAction.hh"
+#include <iostream>
+
 
 int main(int argc, char** argv)
 {
+	if(std::remove("output.txt")<0){
+		std::cout<<"A new output file will be written, woohoo!"<<std::endl;	
+	}
+	else std::cout<<"You dare run this program whilst an output.txt already exists?"<<
+	" Now watch your kingdom engulf in flame as I lay waste to what"
+	<< " you once recorded."<<std::endl;
 	G4UIExecutive* ui=0;
 	if(argc==1){
 		ui=new G4UIExecutive(argc,argv);
