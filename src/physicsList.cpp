@@ -37,6 +37,10 @@
 #include "G4UserSpecialCuts.hh"
 #include "G4ProcessManager.hh"
 
+<<<<<<< HEAD
+#include "G4EmLivermorePhysics.hh"
+=======
+>>>>>>> 2cd52cef477b615c6c12ee94aa7c54be0fdc6330
 
 #include "G4EmPenelopePhysics.hh"
 #include "G4PenelopeIonisationModel.hh"
@@ -48,7 +52,7 @@
 #include "G4IonConstructor.hh"
 #include "G4MesonConstructor.hh"
 
-
+#include "G4Proton.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +107,16 @@ void physicsList::ConstructProcess()
   AddTransportation();
   G4StepLimiter* stepLimiter=new G4StepLimiter();
   G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
+  G4EmLivermorePhysics* emPhys2=new G4EmLivermorePhysics();
   emPhys->ConstructProcess();
+<<<<<<< HEAD
+  emPhys2->ConstructProcess();
+  G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+  //G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager();
+ 
+  pmanagerE->AddDiscreteProcess(stepLimiter);
+  //pmanagerP->AddDiscreteProcess(stepLimiter);
+=======
 
   //for electrons
 
@@ -112,6 +125,7 @@ void physicsList::ConstructProcess()
   // //for protons
 
   // G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
+>>>>>>> 2cd52cef477b615c6c12ee94aa7c54be0fdc6330
   
   pmanagerE->AddDiscreteProcess(stepLimiter);
 

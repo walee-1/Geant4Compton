@@ -45,7 +45,7 @@ target_link_libraries(test_example ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(visualization_SCRIPTS
-    vis.mac init_vis.mac vis2.mac
+    vis.mac vis2.mac init_vis.mac vis3.mac
   )
 
 foreach(_script ${visualization_SCRIPTS})
