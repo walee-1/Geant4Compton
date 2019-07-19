@@ -15,7 +15,7 @@ N01PrimaryGeneratorAction::N01PrimaryGeneratorAction()
     particleGun->SetParticleDefinition(G4Electron::ElectronDefinition());
     particleGun->SetParticleEnergy(700*MeV);
     particleGun->SetParticlePosition(G4ThreeVector(0,0,-10*mm));
-
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
 }
 
 N01PrimaryGeneratorAction::~N01PrimaryGeneratorAction()
@@ -26,6 +26,6 @@ N01PrimaryGeneratorAction::~N01PrimaryGeneratorAction()
 
 void N01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    particleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
+    
     particleGun->GeneratePrimaryVertex(anEvent);
 }

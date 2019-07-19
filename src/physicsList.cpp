@@ -37,6 +37,8 @@
 #include "G4UserSpecialCuts.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4EmLivermorePhysics.hh"
+
 #include "G4EmPenelopePhysics.hh"
 #include "G4PenelopeIonisationModel.hh"
 #include "G4PenelopeBremsstrahlungModel.hh"
@@ -46,7 +48,7 @@
 
 #include "G4IonConstructor.hh"
 
-
+#include "G4Proton.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,10 +95,14 @@ void physicsList::ConstructProcess()
   AddTransportation();
   G4StepLimiter* stepLimiter=new G4StepLimiter();
   G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
+  G4EmLivermorePhysics* emPhys2=new G4EmLivermorePhysics();
   emPhys->ConstructProcess();
+  emPhys2->ConstructProcess();
   G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+  //G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager();
  
   pmanagerE->AddDiscreteProcess(stepLimiter);
+  //pmanagerP->AddDiscreteProcess(stepLimiter);
   
   
   //pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);

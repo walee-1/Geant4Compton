@@ -1,7 +1,17 @@
 /control/verbose 2
 /control/saveHistory
-/run/verbose 2
-/run/initialize
+/tracking/verbose 0
+/event/verbose 0
+/gps/verbose 2
+
+/gps/particle proton
+/gps/pos/centre 0 0 -10 mm
+
+/gps/ang/type iso
+/gps/ang/mintheta 135 deg
+/gps/ang/maxtheta 180 deg
+/gps/ene/mono 7 keV
+
 /vis/open OGL
 /vis/drawVolume
 /vis/scene/add/axes 0 0 0 0.5 m
