@@ -4,7 +4,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "particle_gun.hh"
-using namespace std;
 SimpleParticleSource::SimpleParticleSource() : G4VUserPrimaryGeneratorAction()
 {
 
@@ -14,7 +13,7 @@ SimpleParticleSource::SimpleParticleSource() : G4VUserPrimaryGeneratorAction()
 			
 			//set particle kinetic energy and direction of travel
 			myGun->SetParticleEnergy(700*keV);
-			myGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
+			
 			myGun->SetParticlePosition(G4ThreeVector(0,0,-10*mm));
 			
 			//generate on instance of specified particle
@@ -25,5 +24,6 @@ SimpleParticleSource::~SimpleParticleSource(){}
 
 void SimpleParticleSource::GeneratePrimaries(G4Event* evt)
 {
+	myGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
 	myGun->GeneratePrimaryVertex(evt);
 }

@@ -1,7 +1,4 @@
-#include "detector.hh"
-//#include "particle_gun.hh" //if you want to use a particle gun directly 
 #include "G4RunManager.hh"
-#include "physicsList.hh"
 //#include "Randomize.hh"  //random number generator
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -9,7 +6,15 @@
 //#include "G4UIterminal.hh" 
 //UI terminal control
 //#include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
-#include "N01PrimaryGeneratorAction.hh"
+
+
+#include "PrimaryGeneratorAction.hh"
+#include "physicsList.hh"
+#include "detector.hh"
+#include "ActionInitialization.hh"
+#include "SteppingVerbose.hh"
+//#include "particle_gun.hh" //if you want to use a particle gun directly 
+
 #include <iostream>
 
 
@@ -18,8 +23,8 @@ int main(int argc, char** argv)
 	if(std::remove("output.txt")<0){
 		std::cout<<"A new output file will be written, woohoo!"<<std::endl;	
 	}
-	else std::cout<<"You dare run this program whilst an output.txt already exists?"<<
-	" Now watch your kingdom engulf in flame as I lay waste to what"
+	else std::cout<<"You dare run this program whilst an output.txt already exists?"<<std::endl<<
+	"Now watch your kingdom engulf in flame as I lay waste to what"
 	<< " you once recorded."<<std::endl;
 	G4UIExecutive* ui=0;
 	if(argc==1){
@@ -37,16 +42,20 @@ int main(int argc, char** argv)
 	//G4VModularPhysicsList* physicsList=new QBBC;
 	//G4PhysListFactory factory;
 	//G4VModularPhysicsList* physList=factory.ReferencePhysList();
+
 	G4VUserPhysicsList* physics = new physicsList;
 	runManager->SetUserInitialization(physics);
+
 	//runManager->SetUserInitialization(physList);
 	//particle source initialization
 
-	//Primary Generator Action
-	G4VUserPrimaryGeneratorAction* myAction=new N01PrimaryGeneratorAction;
-	runManager->SetUserAction(myAction);
+	// //Primary Generator Action
+	// G4VUserPrimaryGeneratorAction* myAction=new N01PrimaryGeneratorAction;
+	// runManager->SetUserAction(myAction);
 	
-	
+	runManager->SetUserInitialization(new ActionInitialization());
+
+	runManager->Initialize();
 	
 	// visualization manager
 	G4VisManager* visManager = new G4VisExecutive;
@@ -65,6 +74,7 @@ int main(int argc, char** argv)
 		delete ui;
 	}
 	//free up memory
+	delete visManager;
 	delete runManager;
 	return 0;
 

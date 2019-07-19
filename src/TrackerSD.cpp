@@ -63,9 +63,9 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   fHitsCollection->insert( newHit );
 
-  newHit->Print();
+  //newHit->Print();
   //newHit->Draw();
-  newHit->Write();
+  //newHit->Write();
 
 
   return true;

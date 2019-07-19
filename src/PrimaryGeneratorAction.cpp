@@ -1,4 +1,4 @@
-#include "N01PrimaryGeneratorAction.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ThreeVector.hh"
@@ -7,7 +7,7 @@
 #include "globals.hh"
 #include "G4Proton.hh"
 
-N01PrimaryGeneratorAction::N01PrimaryGeneratorAction() 
+PrimaryGeneratorAction::PrimaryGeneratorAction() 
 {
     G4int n_particle=1;
     particleGun=new G4ParticleGun(n_particle);
@@ -18,19 +18,19 @@ N01PrimaryGeneratorAction::N01PrimaryGeneratorAction()
     // particleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
 
 
-    particleGun->SetParticleEnergy(700*keV);
+    particleGun->SetParticleEnergy(70*keV);
     particleGun->SetParticlePosition(G4ThreeVector(0,0,-100.*mm));
     particleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
 }
 
-N01PrimaryGeneratorAction::~N01PrimaryGeneratorAction()
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
     delete particleGun;
 }
 
 
-void N01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
     particleGun->GeneratePrimaryVertex(anEvent);
 }
