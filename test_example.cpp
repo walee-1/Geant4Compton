@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+#include "detector.hh"
+#include "particle_gun.hh" //if you want to use a particle gun directly 
+#include "particle_src.hh"
+>>>>>>> 6211eab22724c025baccce8040fd0dceabf254cd
 #include "G4RunManager.hh"
 //#include "Randomize.hh"  //random number generator
 #include "G4VisExecutive.hh"
@@ -57,6 +63,7 @@ int main(int argc, char** argv)
 	//runManager->SetUserInitialization(physList);
 	//particle source initialization
 
+<<<<<<< HEAD
 	// //Primary Generator Action
 	// G4VUserPrimaryGeneratorAction* myAction=new N01PrimaryGeneratorAction;
 	// runManager->SetUserAction(myAction);
@@ -64,6 +71,11 @@ int main(int argc, char** argv)
 	runManager->SetUserInitialization(new ActionInitialization());
 
 	runManager->Initialize();
+=======
+	//Primary Generator Action
+	G4VUserPrimaryGeneratorAction* myAction=new GenParticleSource;
+	runManager->SetUserAction(myAction);
+>>>>>>> 6211eab22724c025baccce8040fd0dceabf254cd
 	
 	// visualization manager
 	G4VisManager* visManager = new G4VisExecutive;
@@ -84,6 +96,7 @@ int main(int argc, char** argv)
 	//free up memory
 	delete visManager;
 	delete runManager;
+
 	return 0;
 
 
@@ -122,8 +135,4 @@ int main(int argc, char** argv)
 	
 	// runManager->BeamOn(30);
 	// delete runManager;
-	// return 0;
-	
-
-
 }
