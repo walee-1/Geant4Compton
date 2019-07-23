@@ -49,7 +49,8 @@ EventAction::EventAction()
 :G4UserEventAction(),
  fTotalEnergyDeposit(0.)//
 { 
-    histoIDs={-1,-1};
+    histoIDs={-1,-1,-1};
+    maxRange=-160;
     //set printing per each event -> shows seed, bad idea for large number of events
     //G4RunManager::GetRunManager()->SetPrintProgress(1);
 }
@@ -61,10 +62,17 @@ EventAction::~EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void EventAction::MaxPosition(G4double range){
+  if(maxRange<range){
+    maxRange=range;
+  }
+}
+
 void EventAction::BeginOfEventAction( const G4Event*)
 { 
  //initializations   
  fTotalEnergyDeposit = 0.;
+ maxRange=-160.;
 
 
  //Theory: When you know everything but nothing works;
@@ -82,6 +90,9 @@ void EventAction::BeginOfEventAction( const G4Event*)
     if(histoIDs[1]<0){
       histoIDs[1]=analysisManager->GetH1Id("Total Energy Deposited Per Event in Silicon");
     }
+    if(histoIDs[2]<0){
+      histoIDs[2]=analysisManager->GetH1Id("Range Histogram");
+    } 
 
 }
 
@@ -109,6 +120,7 @@ void EventAction::EndOfEventAction( const G4Event* event)
 
 
   analysisManager->FillH1(histoIDs[0], fTotalEnergyDeposit/eV);
+  analysisManager->FillH1(histoIDs[2],maxRange/um);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
