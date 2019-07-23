@@ -20,6 +20,12 @@
 
 int main(int argc, char** argv)
 {
+	if (std::rename("output.root","output_old.root")<0){
+		std::cout<<"Yea, the first runs are always nerve wracking aren't they?"<<G4endl
+		<<"Let's hope you find what you are searching for in output.root"<<G4endl;
+	}
+	else G4cout<<"Even though you don't care for old data, I do... Renamed the file"<<G4endl
+	<<"Save your data, save your hair and the consequent headbanging on the keyboard"<<G4endl<<G4endl;
 	if(std::remove("output.txt")<0){
 		std::cout<<"A new output file will be written, woohoo!"<<std::endl;	
 	}
@@ -31,8 +37,10 @@ int main(int argc, char** argv)
 		ui=new G4UIExecutive(argc,argv);
 	}
 	//set up the run manager
-	G4MTRunManager* runManager= new G4MTRunManager;
-	runManager->SetNumberOfThreads(4);
+	// G4MTRunManager* runManager= new G4MTRunManager;
+	// runManager->SetNumberOfThreads(4);
+
+	G4RunManager* runManager= new G4RunManager;
 
 	//detector construction
 	DetectorGeom* detector=new DetectorGeom();

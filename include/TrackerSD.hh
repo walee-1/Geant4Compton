@@ -23,6 +23,7 @@ class TrackerSD : public G4VSensitiveDetector
   public:
     TrackerSD(const G4String& name, 
                 const G4String& hitsCollectionName);
+    TrackerSD(const G4String& name);           
     virtual ~TrackerSD();
   
     // methods from base class
@@ -32,6 +33,7 @@ class TrackerSD : public G4VSensitiveDetector
 
   private:
     TrackerHitsCollection* fHitsCollection;
+    G4int hcID;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

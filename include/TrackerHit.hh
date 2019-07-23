@@ -32,6 +32,8 @@ class TrackerHit : public G4VHit
     // methods from base class
     virtual void Draw();
     virtual void Print();
+
+    //my own methods
     virtual void Write();
 
     // Set methods

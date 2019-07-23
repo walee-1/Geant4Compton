@@ -5,6 +5,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
+#include "RunAction.hh"
 
 #include <iomanip>
 
@@ -106,3 +107,4 @@ void TrackerHit::Write()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

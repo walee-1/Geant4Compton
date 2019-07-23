@@ -16,8 +16,12 @@ RunAction::RunAction(): G4UserRunAction()
     
   // Creating histograms
   //
-  analysisManager->CreateH1("1","energy (eV) deposited",70.,0.,70000.);
-  analysisManager->CreateH1("2","energy deposited per particle",1000,0.,1000.);
+  analysisManager->CreateH1("Total Energy Deposited Per Event", //name of historgram
+                            "energy (eV) deposited", //title of histogram
+                            100., //nbins
+                            0., //xmin
+                            1000000.); //xmax (it further has unitName and fcnName both are set as default to NONE)
+  analysisManager->CreateH1("Total Energy Deposited Per Event in Silicon","energy deposited per particle",100.,0.,1000000.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +41,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
    // Get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  analysisManager->SetVerboseLevel(0);
 
   // Open an output file
   //

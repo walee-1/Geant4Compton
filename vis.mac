@@ -2,7 +2,7 @@
 /control/saveHistory
 /run/verbose 2
 /run/initialize
-/vis/open OGL
+/vis/open HepRep
 /vis/drawVolume
 /vis/viewer/flush
 /vis/scene/add/trajectories smooth

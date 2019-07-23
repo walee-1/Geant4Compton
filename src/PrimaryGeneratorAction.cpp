@@ -18,7 +18,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     // particleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
 
 
-    particleGun->SetParticleEnergy(70*keV);
+    particleGun->SetParticleEnergy(1*MeV);
     particleGun->SetParticlePosition(G4ThreeVector(0,0,-100.*mm));
     particleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
 }

@@ -90,11 +90,16 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 
 
 		//still under investigation and coding routine, not final AT ALL! 
-		G4String trackerChamberSDname="/Silicon";
-		TrackerSD* sensitive=new TrackerSD(trackerChamberSDname,"TrackerHitsCollection");
+		// G4String trackerChamberSDname="/Si";
+		// TrackerSD* sensitive=new TrackerSD(trackerChamberSDname,"TrackerHitsCollection");
+
+		//TrackerSD* sensitive=new TrackerSD(trackerChamberSDname);
+		G4String SDname;
+		TrackerSD* sensitive=new TrackerSD(SDname="/active");
 		G4SDManager* sdman = G4SDManager::GetSDMpointer();
 		sdman->AddNewDetector(sensitive);
-		SetSensitiveDetector("LogicalVolumeSi",sensitive,true);
+		logicTargetSi->SetSensitiveDetector(sensitive);
+		//SetSensitiveDetector("LogicalVolumeSi",sensitive,true);
 
 		
 		//Al

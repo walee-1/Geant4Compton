@@ -3,7 +3,10 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include <array>
+#include <vector>
 
+const G4int kDim=2;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
@@ -20,7 +23,10 @@ class EventAction : public G4UserEventAction
     G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};    
         
   private:
-    G4double fTotalEnergyDeposit;   // Energy deposited in c6f6
+    G4double fTotalEnergyDeposit;   // Energy deposited
+    G4int fHCID;
+    std::array<std::vector<G4double>, kDim> fEDep;
+    std::vector<G4int> histoIDs;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
