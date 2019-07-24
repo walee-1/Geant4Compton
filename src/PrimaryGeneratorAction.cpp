@@ -12,13 +12,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     G4int n_particle=1;
     particleGun=new G4ParticleGun(n_particle);
 
-    particleGun->SetParticleDefinition(G4Electron::ElectronDefinition());
+    // particleGun->SetParticleDefinition(G4Electron::ElectronDefinition());
 
     // //for protons
-    // particleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
+    particleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
 
 
-    particleGun->SetParticleEnergy(200*keV);
+    particleGun->SetParticleEnergy(15*keV);
     particleGun->SetParticlePosition(G4ThreeVector(0,0,-100.*mm));
     particleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1.0));
 }

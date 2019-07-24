@@ -107,13 +107,15 @@ void physicsList::ConstructProcess()
 
   //for electrons
 
-  G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+  // G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
 
   // //for protons
 
-  // G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
-  
-  pmanagerE->AddDiscreteProcess(stepLimiter);
+  G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
+  pmanagerP->AddDiscreteProcess(stepLimiter);
+
+
+  // pmanagerE->AddDiscreteProcess(stepLimiter);
 
   // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
   // pmanagerE->AddProcess(multiscattering,ordInActive,1,1);
@@ -156,7 +158,7 @@ void physicsList::SetCuts()
   regName="detectorSi";
   region=G4RegionStore::GetInstance()->GetRegion(regName); 
   cuts= new G4ProductionCuts;
-  cuts->SetProductionCut(0.1*um);
+  cuts->SetProductionCut(5*nm); //changed from 0.1 um to 5nm for protons, change it back once done
   region->SetProductionCuts(cuts);
 
   // regName="detectorAl";
