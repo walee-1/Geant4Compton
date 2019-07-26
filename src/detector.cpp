@@ -17,19 +17,25 @@
 #include "TrackerSD.hh"
 #include "G4PhysicalVolumeStore.hh"
 
+#include "G4UserLimits.hh"
+
 DetectorGeom::DetectorGeom():G4VUserDetectorConstruction(){} //constructor
 
 DetectorGeom::~DetectorGeom(){} //virtual destructor
 
 G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymorphism
 {
+		//setting step limits
+		G4UserLimits* myLimits= new G4UserLimits();
+		myLimits->SetMaxAllowedStep(0.1*um);
+
 		G4NistManager* nist = G4NistManager::Instance();
 		
 		//materials for world and target and whatever else, galactic is vacuum
 		G4Material* Si=nist->FindOrBuildMaterial("G4_Si");
 		G4Material* Al=nist->FindOrBuildMaterial("G4_Al");
 
-		G4Material* vac=nist->FindOrBuildMaterial("G4_Galactic"); //space to be exact
+		// G4Material* vac=nist->FindOrBuildMaterial("G4_Galactic"); //space to be exact
 
 
 		//new vacuum definition
@@ -40,11 +46,15 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		// G4int ncomponents=1.;
 		// G4double fractionmass=1.;
 
-		// G4Material* vac=new G4Material("Vac",density,ncomponents,kStateGas,temperature,pressure);
+		G4double density=10.e-15*g/cm3;
+		G4double pressure=10.e-12*bar;
+		G4double temperature=295.*kelvin;
+		G4Element* N=new G4Element("Nitrogen","N",  7.,  14.00674*g/mole);
+		G4Element* O=new G4Element("Oxygen",  "O",  8.,  15.9994*g/mole);
 
-		// vac->AddMaterial(air,fractionmass);
-
-
+		G4Material* vac = new G4Material("Vacuum", density, 2,kStateGas, temperature,pressure);
+    	vac-> AddElement(N, .7);
+   		vac-> AddElement(O, .3);
 
 		
 		//define the world solize, 5x5x5m^3 in my case
@@ -84,10 +94,12 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		//give a name to the region of the Silicon detector for setting production cuts, you call whatever string you pass in G4Region.
 		G4Region* detectorSi=new G4Region("detectorSi");
 		detectorSi->AddRootLogicalVolume(logicTargetSi);//attach a logical volume to the region.
+		detectorSi->SetUserLimits(myLimits);
 
 		G4VisAttributes* siAtt=new G4VisAttributes(G4Colour(0.,0.,1.));//just for visualization purposes, rgb code
 		logicTargetSi->SetVisAttributes(siAtt); //set the color to some logical volume
 
+		logicTargetSi->SetUserLimits(myLimits);
 
 		//still under investigation and coding routine, not final AT ALL! 
 		// G4String trackerChamberSDname="/Si";
@@ -105,13 +117,14 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		//Al
 		G4double target_sizeXAl=target_sizeX;
 		G4double target_sizeYAl=target_sizeY;
-		G4double target_sizeZAl=100./2.*nm;
+		G4double target_sizeZAl=10./2.*nm;
 		G4Box* solidTargetAl=new G4Box("TargetAl",target_sizeXAl,target_sizeYAl,target_sizeZAl);
 		G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"LogicalVolumeAl");
 
 		//this makes the detector pretty.
 		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.75,0.75,0.75));
 		logicTargetAl->SetVisAttributes(alAtt);
+		logicTargetAl->SetUserLimits(myLimits);
 
 		//give a name to the region of the aluminum detector for setting production cuts
 		G4Region* detectorAl=new G4Region("detectorAl");
@@ -129,7 +142,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 						0,
 						true);
 		new G4PVPlacement(0,
-						G4ThreeVector(0,0,-150.05*um), //since the al is 100nm, and things are placed in the center, 300/2+100/2
+						G4ThreeVector(0,0,-150.005*um), //since the al is 100nm, and things are placed in the center, 300/2+10/2
 						logicTargetAl,
 						"Aluminium",
 						logicWorld,

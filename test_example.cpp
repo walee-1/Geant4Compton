@@ -10,6 +10,7 @@
 
 #include "PrimaryGeneratorAction.hh"
 #include "physicsList.hh"
+
 #include "detector.hh"
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
@@ -41,6 +42,9 @@ int main(int argc, char** argv)
 	// runManager->SetNumberOfThreads(4);
 
 	G4RunManager* runManager= new G4RunManager;
+	// visualization manager
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager->Initialize();
 
 	//detector construction
 	DetectorGeom* detector=new DetectorGeom();
@@ -51,7 +55,7 @@ int main(int argc, char** argv)
 	//G4PhysListFactory factory;
 	//G4VModularPhysicsList* physList=factory.ReferencePhysList();
 
-	G4VUserPhysicsList* physics = new physicsList;
+	physicsList* physics = new physicsList();
 	runManager->SetUserInitialization(physics);
 
 	//runManager->SetUserInitialization(physList);
@@ -65,9 +69,7 @@ int main(int argc, char** argv)
 
 	runManager->Initialize();
 	
-	// visualization manager
-	G4VisManager* visManager = new G4VisExecutive;
-	visManager->Initialize();
+	
 	G4UImanager* UImanager= G4UImanager::GetUIpointer();
 	//if you send a command with the execution of the binary
 	if(!ui){

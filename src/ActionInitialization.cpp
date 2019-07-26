@@ -4,6 +4,7 @@
 #include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "generalParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -28,7 +29,8 @@ void ActionInitialization::BuildForMaster() const
 void ActionInitialization::Build() const
 {
   SetUserAction(new RunAction);
-  SetUserAction(new PrimaryGeneratorAction);
+  //SetUserAction(new PrimaryGeneratorAction);
+  SetUserAction(new generalParticleSource);
   EventAction* eventAction = new EventAction;
   SetUserAction(eventAction);
   SetUserAction(new SteppingAction(eventAction));

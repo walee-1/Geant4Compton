@@ -2,12 +2,9 @@
 /control/saveHistory
 /tracking/verbose 0
 /event/verbose 0
-#/gps/verbose 2
-#/testem/phys/addPhysics  emstandard_opt3
+/gps/verbose 2
 
-#/testem/stepMax 0.5 mm
-
-/gps/particle proton
+/gps/particle e-
 /gps/pos/centre 0 0 -10 mm
 
 #/gps/ang/type iso
@@ -15,7 +12,7 @@
 #/gps/ang/maxtheta 180 deg
 /gps/direction 0 0 1.
 /gps/ene/type Mono
-/gps/ene/mono 15 keV
+/gps/ene/mono 300 keV
 #/gps/ene/sigma 5. keV
 
 #/gps/source/add 1
@@ -26,10 +23,9 @@
 #/gps/ene/mono 10 keV
 #/gps/ene/sigma 1. keV
 
-/run/verbose 2
-/run/initialize
 /vis/open OGL
 /vis/drawVolume
+/vis/scene/add/axes 0 0 0 0.5 m
 /vis/viewer/flush
 /vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
@@ -38,7 +34,6 @@
 /vis/scene/add/trajectories rich
 /vis/modeling/trajectories/create/drawByParticleID
 /vis/modeling/trajectories/drawByParticleID-0/set e- red
-/vis/scene/endOfEventAction accumulate 100
-/vis/verbose warnings
-/run/beamOn 50000
+/vis/scene/endOfEventAction accumulate 50000
+/run/beamOn 100
 exit

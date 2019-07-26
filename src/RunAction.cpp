@@ -18,11 +18,11 @@ RunAction::RunAction(): G4UserRunAction()
   //
   analysisManager->CreateH1("Total Energy Deposited Per Event", //name of historgram
                             "energy (eV) deposited in all the detector", //title of histogram
-                            1000., //nbins
+                            3000., //nbins
                             0., //xmin
-                            15000.); //xmax (it further has unitName and fcnName both are set as default to NONE)
+                            16000.); //xmax (it further has unitName and fcnName both are set as default to NONE)
   analysisManager->CreateH1("Total Energy Deposited Per Event in Silicon","Energy deposited in Silicon",1000.,0.,15000.);
-  analysisManager->CreateH1("Range Histogram","Range in Entire Detector",3000,-151.,150.);
+  analysisManager->CreateH1("Range Histogram","Range in Entire Detector",3000,-151.,-149.6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

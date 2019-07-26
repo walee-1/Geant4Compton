@@ -28,14 +28,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "physicsList.hh"
-#include "G4ParticleTypes.hh"
-#include "G4SystemOfUnits.hh"
-#include <G4ParticleDefinition.hh>
 #include <G4RegionStore.hh>
+#include "G4SystemOfUnits.hh"
+
+#include "G4ParticleTypes.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include <iomanip>
+
+
 
 #include "G4StepLimiter.hh"
 #include "G4UserSpecialCuts.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4EmProcessOptions.hh"
 
 
 #include "G4EmPenelopePhysics.hh"
@@ -47,6 +57,12 @@
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4MesonConstructor.hh"
+#include "G4hMultipleScattering.hh"
+#include "G4hIonisation.hh"
+#include "G4hBetheBlochModel.hh"
+#include "G4PhysicsListHelper.hh"
+#include "G4hPairProduction.hh"
+#include "G4hBremsstrahlung.hh"
 
 
 
@@ -105,61 +121,97 @@ void physicsList::ConstructProcess()
   G4EmPenelopePhysics* emPhys=new G4EmPenelopePhysics();
   emPhys->ConstructProcess();
 
-  //for electrons
+  auto theParticleIterator = GetParticleIterator();
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  // 
+ 
+  theParticleIterator->reset();
+  while((*theParticleIterator)())
+  {
 
-  // G4ProcessManager* pmanagerE = G4Electron::Electron()->GetProcessManager();
+    G4ParticleDefinition* particle = theParticleIterator->value();
 
-  // //for protons
+    
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    pmanager->AddDiscreteProcess(stepLimiter);
+    G4String particleName = particle->GetParticleName();
 
-  G4ProcessManager* pmanagerP = G4Proton::Proton()->GetProcessManager(); //in case of protons
-  pmanagerP->AddDiscreteProcess(stepLimiter);
+
+    //For using a particle GUn
+    //for electrons
+
+   // G4ProcessManager* pmanager = G4Electron::Electron()->GetProcessManager();
+
+    // //for protons
+
+    //G4ProcessManager* pmanager = G4Proton::Proton()->GetProcessManager(); //in case of protons
 
 
-  // pmanagerE->AddDiscreteProcess(stepLimiter);
+   
+     
+    if (particleName == "e-") {
+      
+        ph->RegisterProcess(new G4eMultipleScattering(), particle);            
+        G4eIonisation* eIoni = new G4eIonisation();
+        eIoni->SetStepFunction(0.1, 10*nm);      
+        ph->RegisterProcess(eIoni, particle);
+        ph->RegisterProcess(new G4eBremsstrahlung(), particle); 
+        //pmanager->AddProcess(new G4SecondaryElectronEmission, -1, -1, 1);
+        //pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
+        //pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
+        //ph->RegisterProcess(new G4SecondaryElectronEmission(), particle); 
+                          
+    } else if( particleName == "proton" ||
+                particleName == "pi-" ||
+                particleName == "pi+"    ) {
 
-  // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
-  // pmanagerE->AddProcess(multiscattering,ordInActive,1,1);
-
-  // G4eIonisation* ioniz=new G4eIonisation();
-  // ioniz->SetEmModel(new G4PenelopeIonisationModel());
-  // pmanagerE->AddProcess(ioniz,ordInActive,2,2);
+        ph->RegisterProcess(new G4hMultipleScattering(), particle);      
+        G4hIonisation* hIoni = new G4hIonisation();
+        hIoni->SetStepFunction(0.1, 20*nm);
+        ph->RegisterProcess(hIoni, particle);
+        ph->RegisterProcess(new G4hBremsstrahlung(), particle);
+        ph->RegisterProcess(new G4hPairProduction(), particle);
+        //pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
+        //pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
+     }
+    
+  }
+  
 
   
-  //attempts at adding processes one by one instead of loading in the whole physics package
+  //emOptions.SetMscStepLimitation(fUseDistanceToBoundary); //uncommenting this causes segementation errors for now, have to look into it.
 
-  //pmanagerE->AddProcess(new G4eMultipleScattering(),-1,1,1);
-  // G4eIonisation* theIonisation = new G4eIonisation(); 
-  // theIonisation->SetEmModel(new G4PenelopeIonisationModel()); 
-  // pmanagerE->AddProcess(theIonisation,-1,1,1);
-  // G4eBremsstrahlung* bremy=new G4eBremsstrahlung();
-  // bremy->SetEmModel(new G4PenelopeBremsstrahlungModel());
-  // pmanagerE->AddProcess(bremy,-1,1,1);
-  // G4eMultipleScattering* multiscattering=new G4eMultipleScattering();
-  // pmanagerE->AddProcess(multiscattering,-1,1,1);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void physicsList::SetCuts()
 {
+  G4EmProcessOptions emOptions;
+  emOptions.SetMinEnergy(10*eV);
+  emOptions.SetMaxEnergy(1*TeV); 
+  //Setting this to <1MeV causes segmentation errors
+  emOptions.SetDEDXBinning(12*15);
+  emOptions.SetLambdaBinning(12*15);
+
 
   // default production thresholds for the world volume
   //SetCutsWithDefault();
   //set different than default thresholds for the world volume
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV,1*MeV);
+  //G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(10*eV,1*MeV);
   //SetCutValue(10*nm,"e-");
   
   //go over each region as defined in detector.cpp and assign different cuts according to your requirement.
-  G4Region* region;
-  G4String regName;
-  G4ProductionCuts* cuts;
-  
+  // G4Region* region;
+  // G4String regName;
+  // G4ProductionCuts* cuts;
 
-  regName="detectorSi";
-  region=G4RegionStore::GetInstance()->GetRegion(regName); 
-  cuts= new G4ProductionCuts;
-  cuts->SetProductionCut(5*nm); //changed from 0.1 um to 5nm for protons, change it back once done
-  region->SetProductionCuts(cuts);
+  // regName="detectorSi";
+  // region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  // cuts= new G4ProductionCuts;
+  // cuts->SetProductionCut(1*um); //changed from 0.1 um to 5nm for protons, change it back once done
+  // region->SetProductionCuts(cuts);
 
   // regName="detectorAl";
   // region=G4RegionStore::GetInstance()->GetRegion(regName); 
