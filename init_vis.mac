@@ -1,17 +1,48 @@
-# Macro file for the initialization of example B1
-# in interactive session
-#
-# Set some default verbose
+/testem/phys/addPhysics emstandard_opt3
+
 /control/verbose 2
 /control/saveHistory
+/tracking/verbose 0
+/event/verbose 0
+#/gps/verbose 2
+
+
+
+
+/gps/particle proton
+#/gps/particle e-
+/gps/pos/centre 0 0 -10 mm
+
+#/gps/ang/type iso
+#/gps/ang/mintheta 135 deg
+#/gps/ang/maxtheta 180 deg
+/gps/direction 0 0 1.
+/gps/ene/type Mono
+/gps/ene/mono 15 keV
+#/gps/ene/sigma 5. keV
+
+#/gps/source/add 1
+#/gps/particle e-
+#/gps/pos/centre 0 20 -10 mm
+#/gps/direction 0 1. 1.
+#/gps/ene/type Gauss
+#/gps/ene/mono 10 keV
+#/gps/ene/sigma 1. keV
+
 /run/verbose 2
-#
-# Change the default number of threads (in multi-threaded mode)
-#/run/numberOfThreads 4
-#
-# Initialize kernel
 /run/initialize
-#
-# Visualization setting
-/control/execute vis.mac
+/vis/open OGL
+/vis/drawVolume
+/vis/viewer/flush
+/testem/stepMax 1 nm
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/scene/add/trajectories rich
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set e- red
+/vis/scene/endOfEventAction accumulate 100
+/vis/verbose warnings
+/run/beamOn 50000
 exit

@@ -26,8 +26,8 @@ DetectorGeom::~DetectorGeom(){} //virtual destructor
 G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymorphism
 {
 		//setting step limits
-		G4UserLimits* myLimits= new G4UserLimits();
-		myLimits->SetMaxAllowedStep(0.1*um);
+		//G4UserLimits* myLimits= new G4UserLimits();
+		//myLimits->SetMaxAllowedStep(0.1*um);
 
 		G4NistManager* nist = G4NistManager::Instance();
 		
@@ -94,12 +94,12 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		//give a name to the region of the Silicon detector for setting production cuts, you call whatever string you pass in G4Region.
 		G4Region* detectorSi=new G4Region("detectorSi");
 		detectorSi->AddRootLogicalVolume(logicTargetSi);//attach a logical volume to the region.
-		detectorSi->SetUserLimits(myLimits);
+		//detectorSi->SetUserLimits(myLimits);
 
 		G4VisAttributes* siAtt=new G4VisAttributes(G4Colour(0.,0.,1.));//just for visualization purposes, rgb code
 		logicTargetSi->SetVisAttributes(siAtt); //set the color to some logical volume
 
-		logicTargetSi->SetUserLimits(myLimits);
+		//logicTargetSi->SetUserLimits(myLimits);
 
 		//still under investigation and coding routine, not final AT ALL! 
 		// G4String trackerChamberSDname="/Si";
@@ -124,7 +124,7 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 		//this makes the detector pretty.
 		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.75,0.75,0.75));
 		logicTargetAl->SetVisAttributes(alAtt);
-		logicTargetAl->SetUserLimits(myLimits);
+		//logicTargetAl->SetUserLimits(myLimits);
 
 		//give a name to the region of the aluminum detector for setting production cuts
 		G4Region* detectorAl=new G4Region("detectorAl");

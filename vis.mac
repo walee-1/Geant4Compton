@@ -3,7 +3,7 @@
 /tracking/verbose 0
 /event/verbose 0
 #/gps/verbose 2
-#/testem/phys/addPhysics  emstandard_opt3
+/testem/phys/addPhysics emstandard_opt3
 
 #/testem/stepMax 0.5 mm
 

@@ -1,4 +1,5 @@
 #include "RunAction.hh"
+#include "detector.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -6,9 +7,12 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
+#include "StepMax.hh"
+#include "PhysicsList.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(): G4UserRunAction()
+RunAction::RunAction(PhysicsList* phys): G4UserRunAction(),fPhysics(phys)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetVerboseLevel(1);  
@@ -42,6 +46,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
    // Get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4double stepMax = fPhysics->GetStepMaxProcess()->GetMaxStep();
 
   analysisManager->SetVerboseLevel(0);
 

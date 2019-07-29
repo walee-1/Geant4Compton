@@ -9,19 +9,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
+class PhysicsList;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction();
+    RunAction(PhysicsList*);
    ~RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-};
+
+  private:
+    PhysicsList* fPhysics;
+    };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

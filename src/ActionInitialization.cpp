@@ -5,6 +5,7 @@
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "generalParticleSource.hh"
+#include "PhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -21,14 +22,16 @@ ActionInitialization::~ActionInitialization()
 
 void ActionInitialization::BuildForMaster() const
 {
- SetUserAction(new RunAction);
+  PhysicsList* phys = new PhysicsList();
+ SetUserAction(new RunAction(phys));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
 {
-  SetUserAction(new RunAction);
+  PhysicsList* phys = new PhysicsList();
+  SetUserAction(new RunAction(phys));
   //SetUserAction(new PrimaryGeneratorAction);
   SetUserAction(new generalParticleSource);
   EventAction* eventAction = new EventAction;
