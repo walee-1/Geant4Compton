@@ -107,7 +107,8 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 
 		//TrackerSD* sensitive=new TrackerSD(trackerChamberSDname);
 		G4String SDname;
-		TrackerSD* sensitive=new TrackerSD(SDname="/active");
+		G4String HCname;
+		TrackerSD* sensitive=new TrackerSD(SDname="/active",HCname="HC_Si");
 		G4SDManager* sdman = G4SDManager::GetSDMpointer();
 		sdman->AddNewDetector(sensitive);
 		logicTargetSi->SetSensitiveDetector(sensitive);
@@ -115,20 +116,20 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 
 		
 		//Al
-		G4double target_sizeXAl=target_sizeX;
-		G4double target_sizeYAl=target_sizeY;
-		G4double target_sizeZAl=10./2.*nm;
-		G4Box* solidTargetAl=new G4Box("TargetAl",target_sizeXAl,target_sizeYAl,target_sizeZAl);
-		G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"LogicalVolumeAl");
+		// G4double target_sizeXAl=target_sizeX;
+		// G4double target_sizeYAl=target_sizeY;
+		// G4double target_sizeZAl=10./2.*nm;
+		// G4Box* solidTargetAl=new G4Box("TargetAl",target_sizeXAl,target_sizeYAl,target_sizeZAl);
+		// G4LogicalVolume* logicTargetAl=new G4LogicalVolume(solidTargetAl,Al,"LogicalVolumeAl");
 
-		//this makes the detector pretty.
-		G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.75,0.75,0.75));
-		logicTargetAl->SetVisAttributes(alAtt);
-		//logicTargetAl->SetUserLimits(myLimits);
+		// //this makes the detector pretty.
+		// G4VisAttributes* alAtt=new G4VisAttributes(G4Colour(0.75,0.75,0.75));
+		// logicTargetAl->SetVisAttributes(alAtt);
+		// //logicTargetAl->SetUserLimits(myLimits);
 
-		//give a name to the region of the aluminum detector for setting production cuts
-		G4Region* detectorAl=new G4Region("detectorAl");
-		detectorAl->AddRootLogicalVolume(logicTargetAl);
+		// //give a name to the region of the aluminum detector for setting production cuts
+		// G4Region* detectorAl=new G4Region("detectorAl");
+		// detectorAl->AddRootLogicalVolume(logicTargetAl);
 
 
 
@@ -141,14 +142,14 @@ G4VPhysicalVolume* DetectorGeom::Construct() //virtual function to ensure polymo
 						false,
 						0,
 						true);
-		new G4PVPlacement(0,
-						G4ThreeVector(0,0,-150.005*um), //since the al is 100nm, and things are placed in the center, 300/2+10/2
-						logicTargetAl,
-						"Aluminium",
-						logicWorld,
-						false,
-						0,
-						true);
+		// new G4PVPlacement(0,
+		// 				G4ThreeVector(0,0,-150.005*um), //since the al is 100nm, and things are placed in the center, 300/2+10/2
+		// 				logicTargetAl,
+		// 				"Aluminium",
+		// 				logicWorld,
+		// 				false,
+		// 				0,
+		// 				true);
 
 	
 		return physWorld;

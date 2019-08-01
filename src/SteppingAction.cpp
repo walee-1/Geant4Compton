@@ -18,6 +18,9 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+ auto Track=aStep->GetTrack();
+ G4int TrackID=Track->GetTrackID();
+
  G4double EdepStep = aStep->GetTotalEnergyDeposit();
  if (EdepStep > 0.) fEventAction->AddEdep(EdepStep);
 
@@ -25,7 +28,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  rangePoint = aStep->GetPostStepPoint();
  G4ThreeVector rangeThreeVector= rangePoint->GetPosition();
  G4double rangeStep= rangeThreeVector.getZ();
- fEventAction->MaxPosition(rangeStep);
+ fEventAction->MaxPosition(rangeStep,TrackID);
  //if()
  //example of saving random number seed of this event, under condition
  //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();  

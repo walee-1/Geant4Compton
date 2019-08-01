@@ -58,6 +58,12 @@
 #include "G4NuclearStopping.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4EmProcessOptions.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
+
+
 
 
 
@@ -145,8 +151,22 @@ void PhysListEmStandard::ConstructProcess()
         //pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
         //pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
      }
-    
+
   }
+  G4EmProcessOptions emOptions;
+  emOptions.SetMinEnergy(10*eV);
+  emOptions.SetMaxEnergy(1*TeV); 
+      //Setting this to <1MeV causes segmentation errors
+  emOptions.SetDEDXBinning(12*15);
+  emOptions.SetLambdaBinning(12*15);
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
+
+
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(false);   
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
 }
 
@@ -154,12 +174,6 @@ void PhysListEmStandard::ConstructProcess()
 
 // void PhysListEmStandard::SetCuts()
 // {
-//   // G4EmProcessOptions emOptions;
-//   // emOptions.SetMinEnergy(10*eV);
-//   // emOptions.SetMaxEnergy(1*TeV); 
-//   // //Setting this to <1MeV causes segmentation errors
-//   // emOptions.SetDEDXBinning(12*15);
-//   // emOptions.SetLambdaBinning(12*15);
 
 
 //   // default production thresholds for the world volume

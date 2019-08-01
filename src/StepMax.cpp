@@ -33,6 +33,10 @@
 #include "StepMax.hh"
 #include "StepMaxMessenger.hh"
 
+
+
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
@@ -67,7 +71,6 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(
   *condition = NotForced;
   
   G4double ProposedStep = DBL_MAX;
-
   if((fMaxChargedStep > 0.) &&
      (aTrack.GetVolume() != NULL) &&
      (aTrack.GetVolume()->GetName() != "World"))

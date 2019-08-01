@@ -18,6 +18,8 @@
 
 #include "StepMax.hh"
 
+#include "G4RegionStore.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
@@ -248,9 +250,29 @@ void PhysicsList::SetCuts()
 
  // call base class method to set cuts which default value can be
  // modified via /run/setCut/* commands
+ SetCutsWithDefault();
  G4VUserPhysicsList::SetCuts();
+ 
 
  DumpCutValuesTable();
+
+ //go over each region as defined in detector.cpp and assign different cuts according to your requirement.
+  // G4Region* region;
+  // G4String regName;
+  // G4ProductionCuts* cuts;
+
+  // regName="detectorSi";
+  // region=G4RegionStore::GetInstance()->GetRegion(regName); 
+  // region->SetProductionCuts()
+//   // cuts= new G4ProductionCuts;
+//   // cuts->SetProductionCut(1*um); //changed from 0.1 um to 5nm for protons, change it back once done
+//   // region->SetProductionCuts(cuts);
+
+//   // regName="detectorAl";
+//   // region=G4RegionStore::GetInstance()->GetRegion(regName); 
+//   // cuts= new G4ProductionCuts;
+//   // cuts->SetProductionCut(100*nm);//this has a direct impact on the speed of calculation and how many steps are displayed later on
+//   // region->SetProductionCuts(cuts);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
