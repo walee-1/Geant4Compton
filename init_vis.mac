@@ -1,4 +1,4 @@
-/testem/phys/addPhysics emstandard_opt3
+/testem/phys/addPhysics emstandard_opt4
 
 /control/verbose 2
 /control/saveHistory

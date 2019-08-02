@@ -155,11 +155,11 @@ void PhysListEmStandard::ConstructProcess()
   }
   G4EmProcessOptions emOptions;
   emOptions.SetMinEnergy(10*eV);
-  emOptions.SetMaxEnergy(1*TeV); 
-      //Setting this to <1MeV causes segmentation errors
+  emOptions.SetMaxEnergy(1*TeV); //Setting this to <1MeV causes segmentation errors
   emOptions.SetDEDXBinning(12*15);
   emOptions.SetLambdaBinning(12*15);
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary); //use distance to boundary is applicable if magnetic field is absent
+                                                          //in case of magnetic fields, use the function UseSafetyPlus limitation
 
 
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();

@@ -1,6 +1,5 @@
 #ifndef particle_gun_h
-#define particle_gun_h
-
+#define particle_gun_h 1
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
  class G4ParticleGun;
