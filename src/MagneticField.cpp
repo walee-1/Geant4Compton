@@ -23,71 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/StepMax.cc
-/// \brief Implementation of the StepMax class
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B5MagneticField.cc
+/// \brief Implementation of the B5MagneticField class
 
-#include "StepMax.hh"
-#include "StepMaxMessenger.hh"
+#include "MagneticField.hh"
 
-
-
-
+#include "G4GenericMessenger.hh"
+#include "G4SystemOfUnits.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(0)
+//I use -40mT because for some reason my geometry demands a magnetic field in the -ive z axis for proper turning of particles
+MagneticField::MagneticField()
+: G4MagneticField(), 
+  fMessenger(nullptr)
 {
-  fMess = new StepMaxMessenger(this);
+  fBz=-0.04*tesla;
+  // define commands for this class
+  DefineCommands();
+}
+
+
+MagneticField::MagneticField(G4double mag)
+: G4MagneticField(), 
+  fMessenger(nullptr)
+{
+  fBz=mag;
+  // define commands for this class
+  DefineCommands();
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+MagneticField::~MagneticField()
+{ 
+  delete fMessenger; 
+}
+
+void MagneticField::GetFieldValue(const G4double [4],double *bField) const
+{
+  bField[0] = 0.;
+  bField[1] = 0.;
+  bField[2] = fBz;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete fMess; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
+void MagneticField::DefineCommands()
 {
-  return (particle.GetPDGCharge() != 0. && !particle.IsShortLived());
+  // Define /B5/field command directory using generic messenger class
+  fMessenger = new G4GenericMessenger(this, 
+                                      "/det/field/", 
+                                      "Field control");
+
+  // fieldValue command 
+  auto& valueCmd
+    = fMessenger->DeclareMethodWithUnit("value","tesla",
+                                &MagneticField::SetField, 
+                                "Set field strength.");
+  valueCmd.SetParameterName("field", true);
+  valueCmd.SetDefaultValue("1.");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void StepMax::SetMaxStep(G4double step) {fMaxChargedStep = step;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double StepMax::PostStepGetPhysicalInteractionLength( 
-                                                 const G4Track& aTrack,
-                                                       G4double,
-                                                       G4ForceCondition* condition )
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  
-  G4double ProposedStep = DBL_MAX;
-  if((fMaxChargedStep > 0.) &&
-     (aTrack.GetVolume() != NULL) &&
-     (aTrack.GetVolume()->GetName() != "World"))
-     ProposedStep = fMaxChargedStep;
-
-  return ProposedStep;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
-{
-   // do nothing
-   aParticleChange.Initialize(aTrack);
-   return &aParticleChange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

@@ -23,58 +23,73 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/StepMax.hh
-/// \brief Definition of the StepMax class
+/// \file detectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StepMax_h
-#define StepMax_h 1
+#include "ParticleSourceMessenger.hh"
 
-#include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Step.hh"
+#include "generalParticleSource.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithADouble.hh"
 
-class StepMaxMessenger;
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4UnitsTable.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMax : public G4VDiscreteProcess
+ParticleSourceMessenger::ParticleSourceMessenger(generalParticleSource* fGPS)
+:G4UImessenger(), 
+ fRot(0), fTestemDir(0), fDetDir(0) 
+{ 
+  fTestemDir = new G4UIdirectory("/rotation/");
+  fTestemDir->SetGuidance("commands specific to rotation settings");
+  
+  G4bool broadcast = false;
+  fDetDir = new G4UIdirectory("/rotation/GPS/",broadcast);
+  fDetDir->SetGuidance("Rotation of Particle Source");
+        
+  //For rotation
+    fRot = new G4UIcmdWithADoubleAndUnit("/rotation/GPS/Rotation",this);
+    fRot->SetGuidance("Set Rotation of GPS");
+    fRot->SetParameterName("Rotation",false);
+    //fDensityCmd->SetDefaultUnit("g/cm3");
+    fRot->SetUnitCandidates("deg rad mrad sr");
+    fRot->AvailableForStates(G4State_PreInit,G4State_Idle);
+ 
+  //
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ParticleSourceMessenger::~ParticleSourceMessenger()
 {
-  public:
-
-     StepMax(const G4String& processName = "UserMaxStep");
-    ~StepMax();
-
-     virtual G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void SetMaxStep(G4double);
-
-     G4double GetMaxStep() {return fMaxChargedStep;};
-
-     virtual
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition);
-
-     virtual
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-     
-     virtual
-     G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
-     {return DBL_MAX;};    
-
-  private:
-
-     G4double fMaxChargedStep;
-     
-     StepMaxMessenger* fMess;
-};
+  delete fGPS;
+  delete fDetDir;
+  delete fTestemDir;
+  delete fRot;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ParticleSourceMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{ 
+  // if( command == fRot )
+  //  { 
+  //   fGPS->RotationSet(fRot->GetNewDoubleValue(newValue));
+  //  }
+   
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

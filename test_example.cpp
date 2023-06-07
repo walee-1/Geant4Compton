@@ -8,7 +8,8 @@
 #include "G4MTRunManager.hh" //if we ever want to use multi threaded run manager
 
 
-#include "PrimaryGeneratorAction.hh"
+
+//#include "generalParticleSource.hh"
 #include "PhysicsList.hh"
 
 #include "detector.hh"
@@ -21,13 +22,12 @@
 
 int main(int argc, char** argv)
 {
-	if (std::rename("output.root","output_old.root")<0){
-		std::cout<<"Yea, the first runs are always nerve wracking aren't they?"<<G4endl
-		<<"Let's hope you find what you are searching for in output.root"<<G4endl;
+	if (std::rename("output.root","output_old.root")<0 || std::rename("output.txt","output_old.txt")<0|| std::rename("InputEn.txt","InputEn_old.txt")<0 
+	|| std::rename("Secondary_output.txt","Secondary_output_old.txt")<0 || std::rename("output_All.txt","output_All_old.txt")<0){
+		std::cout<<"OutputFiles: Output.root InputEn.txt Secondary_output.txt output_All.txt"<<G4endl;
 	}
-	else G4cout<<"Even though you don't care for old data, I do... Renamed the file"<<G4endl
-	<<"Save your data, save your hair and the consequent headbanging on the keyboard"<<G4endl<<G4endl;
-	if(std::remove("output.txt")<0){
+	else G4cout<<" Files renamed "<<G4endl<<G4endl;
+	if(std::remove("output.txt")<0||std::remove("InputEn.txt")<0||std::remove("Secondary_output.txt")<0||std::remove("output_All.txt")<0){
 		std::cout<<"A new output file will be written, woohoo!"<<std::endl;	
 	}
 	else std::cout<<"You dare run this program whilst an output.txt already exists?"<<std::endl<<
@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 	visManager->Initialize();
 
 	//detector construction
-	DetectorGeom* detector=new DetectorGeom();
+	DetectorGeom* detector=new DetectorGeom;
 	runManager->SetUserInitialization(detector);
 	
 	//physics initialization && physics list 
@@ -80,12 +80,14 @@ int main(int argc, char** argv)
 		ui->SessionStart();
 		delete ui;
 	}
-	//if you can just want to use vis.mac
+	//if you just want to use vis.mac
 	else {
 		G4String command="/control/execute ";
 		G4String fileName=argv[1];
 		UImanager->ApplyCommand(command+fileName);
+
 	}
+
 	//free up memory
 	//delete visManager;
 	delete runManager;

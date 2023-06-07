@@ -20,16 +20,16 @@ class EventAction : public G4UserEventAction //: public RunAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void AddEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};
+   // void AddEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};      
+   // G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};
 
     void MaxPosition(G4double range, G4int TrackID);  
     
     
   private:
-    G4double fTotalEnergyDeposit;   // Energy deposited
+   // G4double fTotalEnergyDeposit;   // Energy deposited
     G4int fHCID_Si; //for storing the sensitive detector id
-    G4int fHCID_Al;
+ //   G4int fHCID_Al;
     std::array<std::vector<G4double>, kDim> fEDep; //has no purpose for now, can ignore
     std::vector<G4int> histoIDs; //just for storing histogram ids.
     G4double maxRange;

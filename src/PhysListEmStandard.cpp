@@ -58,7 +58,7 @@
 #include "G4NuclearStopping.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
@@ -133,6 +133,9 @@ void PhysListEmStandard::ConstructProcess()
         //eIoni->SetStepFunction(0.1, 10*nm);      
         ph->RegisterProcess(eIoni, particle);
         ph->RegisterProcess(new G4eBremsstrahlung(), particle); 
+        ph->RegisterProcess(new G4ComptonScattering(),particle);
+        ph->RegisterProcess(new G4PhotoElectricEffect(),particle);
+
         //pmanager->AddProcess(new G4SecondaryElectronEmission, -1, -1, 1);
         //pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
         //pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
@@ -153,12 +156,12 @@ void PhysListEmStandard::ConstructProcess()
      }
 
   }
-  G4EmProcessOptions emOptions;
-  emOptions.SetMinEnergy(10*eV);
-  emOptions.SetMaxEnergy(1*TeV); //Setting this to <1MeV causes segmentation errors
-  emOptions.SetDEDXBinning(12*15);
-  emOptions.SetLambdaBinning(12*15);
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary); //use distance to boundary is applicable if magnetic field is absent
+  //G4EmParameters emOptions;
+  //emOptions.SetMinEnergy(10*eV);
+  //emOptions.SetMaxEnergy(1*TeV); //Setting this to <1MeV causes segmentation errors
+  //emOptions.SetDEDXBinning(12*15);
+ // emOptions.SetLambdaBinning(12*15);
+ // emOptions.SetMscStepLimitation(fUseDistanceToBoundary); //use distance to boundary is applicable if magnetic field is absent
                                                           //in case of magnetic fields, use the function UseSafetyPlus limitation
 
 
@@ -167,6 +170,7 @@ void PhysListEmStandard::ConstructProcess()
   de->SetAuger(false);   
   de->SetPIXE(false);  
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  SetVerboseLevel(0);
 
 }
 

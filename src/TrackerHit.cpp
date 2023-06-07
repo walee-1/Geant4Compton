@@ -11,7 +11,11 @@
 
 #include "file.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
+//this is a class that you can use to draw hits on the detector or whatever you want. 
+//Also used to store hits within the detector, in case you want tracking within a detector.
 using namespace std;
 
 G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator=0;
@@ -39,6 +43,7 @@ TrackerHit::TrackerHit(const TrackerHit& right)
   fChamberNb = right.fChamberNb;
   fEdep      = right.fEdep;
   fPos       = right.fPos;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,17 +99,25 @@ void TrackerHit::Print()
 
 void TrackerHit::Write()
 { 
-  file* thisFile=new file();
-  if(thisFile->myFile.is_open()){
-    thisFile->myFile<< "  trackID: " << fTrackID << " chamberNb: " << fChamberNb
-     << " Edep: "
-     << std::setw(7) << G4BestUnit(fEdep,"Energy")
-     << " Position: "
-     << std::setw(7) << G4BestUnit( fPos,"Length")
-     << G4endl;
-  }
-  thisFile->~file();
+  file out("output.txt",true);
+  std::stringstream ss;
+  ss<<posX<<" "<<posY<<" "<<posZ<<" "<<fEdepOld<<" "<<fChamberNb;
+  out.writeToFile(ss.str());
+  out.~file();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void TrackerHit::Histo()
+{ 
+  G4AnalysisManager* anal=G4AnalysisManager::Instance();
+  G4int idh2=anal->GetH2Id("2D Tracking");
+  G4int id=anal->GetH1Id("Maximum Range Histogram");
+  G4int id2=anal->GetH1Id("Total Energy");
+  anal->FillH2(idh2,posX/cm,posY/cm);
+  anal->FillH1(id,posZ/cm);
+  anal->FillH1(id2,fEdepOld/eV);
+
+  
+}

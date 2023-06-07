@@ -2,6 +2,7 @@
 #define SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
+#include "G4UnitsTable.hh"
 
 class EventAction;
 

@@ -1,0 +1,53 @@
+#/control/verbose 0
+/control/saveHistory
+#/tracking/verbose 0
+#/event/verbose 0
+#/gps/verbose 0
+/testem/phys/addPhysics empenelope #in case we want to change the physics library
+
+
+
+
+
+/gps/particle e-
+/gps/pos/centre -184.324 -27.4082 0. mm
+/gps/direction 0.970125 0.242604 0.
+
+
+#Custom imported spectra, has to be a histogram
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/file Histo2Mev.txt
+#/gps/hist/file ../bi207spec.txt
+/gps/hist/inter Lin #Lin refers to interpolation between two points. This is linear, there are other options as well 
+
+#specific vacuum commands
+#/vacuumSettings/det/setDensity 7.e-08 g/cm3
+#/vacuumSettings/det/setPressure 7 bar
+#/vacuumSettings/det/setTemperature 300 kelvin
+#/vacuumSettings/det/setGas 0.00000007 g/cm3 7 bar 300 kelvin
+#/vacuumSettings/det/setWidthTube3 100 mm
+/vacuumSettings/det/setYOffset 20 mm
+
+
+#/run/verbose 2
+/run/initialize
+#/run/printProgress 1000
+#/vis/open OGLS
+##/vis/drawVolume
+#/vis/viewer/flush
+#/vis/scene/add/trajectories smooth
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/scene/add/trajectories rich
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- red
+#/vis/modeling/trajectories/drawByParticleID-0/set proton blue
+#/vis/scene/endOfEventAction accumulate 100
+#/vis/verbose warnings
+
+
+/run/beamOn 5000000
+
+exit

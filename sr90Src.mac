@@ -1,0 +1,63 @@
+#/control/verbose 0
+/control/saveHistory
+#/tracking/verbose 0
+#/event/verbose 0
+#/gps/verbose 0
+/testem/phys/addPhysics empenelope #in case we want to change the physics library
+
+
+
+
+/gps/particle e-
+
+/gps/pos/centre -100.23	-26.058 0. mm
+/gps/direction 0.906 0.423 0.
+#to calculate centre position use: xBeam=xPos-165.*Cos[phi]; yBeam=yPos-165.*Sin[phi];
+
+#/gps/pos/centre 25 10 0. mm
+#/gps/direction 1 0 0.
+
+#/gps/ene/type Mono
+#/gps/ene/mono 1 MeV
+
+
+
+#Custom imported spectra, has to be a histogram
+/gps/ene/type Arb
+
+/gps/hist/type arb
+/gps/hist/file Histo1MeV.txt
+#/gps/hist/file sr90y90spec2.txt
+#/gps/hist/file Histo1MeV.txt
+#/gps/hist/file Histo21Mev.txt
+#/gps/hist/file ../bi207spec.txt
+/gps/hist/inter Lin #Lin refers to interpolation between two points. This is linear, there are other options as well 
+
+#specific vacuum commands
+#/vacuumSettings/det/setDensity 1.e-12 g/cm3
+#/vacuumSettings/det/setPressure 1.e-09 bar
+#/vacuumSettings/det/setTemperature 300 kelvin
+#/vacuumSettings/det/setGas 1.6e-9 g/cm3 1.e-9 bar 300 kelvin
+#/vacuumSettings/det/setYOffset 20 mm
+
+/run/verbose 2
+/run/initialize
+#/run/printProgress 1000
+#/vis/open OGL
+#/vis/open Qt
+#/vis/drawVolume
+#/vis/viewer/flush
+#/vis/scene/add/trajectories smooth
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/scene/add/trajectories rich
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- red
+#/vis/modeling/trajectories/drawByParticleID-0/set proton blue
+#/vis/scene/endOfEventAction accumulate 100
+#/vis/verbose warnings
+
+
+/run/beamOn 5000000
+exit

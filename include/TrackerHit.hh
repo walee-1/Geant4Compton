@@ -35,18 +35,27 @@ class TrackerHit : public G4VHit
 
     //my own methods
     virtual void Write();
+    virtual void Histo();
 
     // Set methods
     void SetTrackID  (G4int track)      { fTrackID = track; };
     void SetChamberNb(G4int chamb)      { fChamberNb = chamb; };
     void SetEdep     (G4double de)      { fEdep = de; };
-    void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
+    void SetPos      (G4ThreeVector xyz){ fPos = xyz; SetPosX(xyz);SetPosY(xyz);SetPosZ(xyz);};
+    void SetPosX     (G4ThreeVector xyz) { posX = xyz.getX();}; 
+    void SetPosY     (G4ThreeVector xyz) { posY = xyz.getY();};  
+    void SetPosZ    (G4ThreeVector xyz) { posZ = xyz.getZ();};     
+    void SetEnOld (G4double de)         {fEdepOld=de;};
 
     // Get methods
     G4int GetTrackID() const     { return fTrackID; };
     G4int GetChamberNb() const   { return fChamberNb; };
     G4double GetEdep() const     { return fEdep; };
     G4ThreeVector GetPos() const { return fPos; };
+    G4double GetEnOld() const    { return fEdepOld;};
+    G4double GetPosX() const     { return posX; };
+    G4double GetPosY() const     { return posY; };
+    G4double GetPosZ() const     { return posZ; };
 
   private:
 
@@ -54,6 +63,10 @@ class TrackerHit : public G4VHit
       G4int         fChamberNb;
       G4double      fEdep;
       G4ThreeVector fPos;
+      G4double      fEdepOld;
+      G4double      posX;
+      G4double      posY;
+      G4double      posZ;
       std::ofstream myFile;
 };
 

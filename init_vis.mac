@@ -1,41 +1,50 @@
-/testem/phys/addPhysics emstandard_opt4
-
-/control/verbose 2
+#/control/verbose 0
 /control/saveHistory
-/tracking/verbose 0
-/event/verbose 0
-#/gps/verbose 2
+#/tracking/verbose 0
+#/event/verbose 0
+#/gps/verbose 0
+/testem/phys/addPhysics empenelope #in case we want to change the physics library
 
 
 
 
-/gps/particle proton
-#/gps/particle e-
-/gps/pos/centre 0 0 -10 mm
+/gps/particle e-
 
-#/gps/ang/type iso
-#/gps/ang/mintheta 135 deg
-#/gps/ang/maxtheta 180 deg
-/gps/direction 0 0 1.
+/gps/pos/centre -174.991 -60.945 0. mm
+/gps/direction 0.906187 0.422878 0.
+#to calculate centre position use: xBeam=xPos-165.*Cos[phi]; yBeam=yPos-165.*Sin[phi];
+
+#/gps/pos/centre 25 10 0. mm
+#/gps/direction 1 0 0.
+
 /gps/ene/type Mono
-/gps/ene/mono 15 keV
-#/gps/ene/sigma 5. keV
+/gps/ene/mono 1 MeV
 
-#/gps/source/add 1
-#/gps/particle e-
-#/gps/pos/centre 0 20 -10 mm
-#/gps/direction 0 1. 1.
-#/gps/ene/type Gauss
-#/gps/ene/mono 10 keV
-#/gps/ene/sigma 1. keV
+
+
+#Custom imported spectra, has to be a histogram
+#/gps/ene/type Arb
+
+#/gps/hist/type arb
+#/gps/hist/file Histo1MeV.txt
+#/gps/hist/file sr90y90spec2.txt
+#/gps/hist/file ../bi207spec.txt
+#/gps/hist/inter Lin #Lin refers to interpolation between two points. This is linear, there are other options as well 
+
+#specific vacuum commands
+#/vacuumSettings/det/setDensity 1.e-12 g/cm3
+#/vacuumSettings/det/setPressure 1.e-09 bar
+#/vacuumSettings/det/setTemperature 300 kelvin
+/vacuumSettings/det/setGas 1.6e-9 g/cm3 1.e-9 bar 300 kelvin
+#/vacuumSettings/det/setYOffset 20 mm
 
 /run/verbose 2
 /run/initialize
 /run/printProgress 1000
-/vis/open OGLS
+/vis/open OGL
+#/vis/open Qt
 /vis/drawVolume
 /vis/viewer/flush
-/testem/stepMax 1 nm
 /vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
@@ -47,13 +56,6 @@
 /vis/scene/endOfEventAction accumulate 100
 /vis/verbose warnings
 
-/analysis/h1/set 1 3000 0 15000
-/analysis/h1/set 2 3000 -150.5 -149.6
-/analysis/h1/set 3 3000 0 15000
-/analysis/h1/set 4 3000 -150.5 -149.6
-/analysis/h1/set 5 3000 -150.5 -149.6
-/analysis/h1/set 6 3000 0 15000
 
-/run/beamOn 50000
-
+/run/beamOn 100
 exit

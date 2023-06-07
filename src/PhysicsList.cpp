@@ -11,12 +11,15 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4PenelopeIonisationModel.hh"
+
+#include "G4eIonisation.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "StepMax.hh"
+
 
 #include "G4RegionStore.hh"
 
@@ -33,7 +36,7 @@ PhysicsList::PhysicsList()
 
   fMessenger = new PhysicsListMessenger(this);
 
-  SetVerboseLevel(2);
+  SetVerboseLevel(0);
 
   // EM physics
   fEmName = G4String("local");
@@ -155,7 +158,7 @@ void PhysicsList::ConstructProcess()
   //
   fEmPhysicsList->ConstructProcess();  
 
-  AddStepMax();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -203,6 +206,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
+ 
+
 
   } else if (name == "emlivermore"){
     fEmName = name;
@@ -219,23 +224,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::AddStepMax()
-{
-  // Step limitation seen as a process
-  fStepMaxProcess = new StepMax();
 
-  auto particleIterator=GetParticleIterator();
-  particleIterator->reset();
-  while ((*particleIterator)()){
-    G4ParticleDefinition* particle = particleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fStepMaxProcess->IsApplicable(*particle) && pmanager)
-      {
-        pmanager->AddDiscreteProcess(fStepMaxProcess);
-      }
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

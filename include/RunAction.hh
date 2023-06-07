@@ -24,9 +24,12 @@ class RunAction : public G4UserRunAction
     virtual void   EndOfRunAction(const G4Run*);
     void histoMaker();
 
+
   private:
     PhysicsList* fPhysics;
     G4AnalysisManager* analysisManager;
+    std::ofstream txtFile;
+
     };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

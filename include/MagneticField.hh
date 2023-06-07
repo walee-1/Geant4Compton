@@ -23,46 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/StepMaxMessenger.cc
-/// \brief Implementation of the StepMaxMessenger class
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B5MagneticField.hh
+/// \brief Definition of the B5MagneticField class
 
-#include "StepMaxMessenger.hh"
+#ifndef MagneticField_h
+#define MagneticField_h 1
 
-#include "StepMax.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIdirectory.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "globals.hh"
+#include "G4MagneticField.hh"
+#include "G4UniformMagField.hh"
+#include "G4FieldManager.hh"
 
-StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:G4UImessenger(),fStepMax(stepM),fStepMaxCmd(0),fStepDir(0)
-{ 
-    //fStepDir = new G4UIdirectory("/testem/stepMax/");
-    //fStepDir->SetGuidance("Set max allowed step length (number unit)");
-    fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
-    fStepMaxCmd->SetGuidance("Set max allowed step length (number unit)");
-    fStepMaxCmd->SetParameterName("mxStep",false);
-    fStepMaxCmd->SetRange("mxStep>0.");
-    fStepMaxCmd->SetUnitCategory("Length");
-}
+class G4GenericMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Magnetic field
 
-StepMaxMessenger::~StepMaxMessenger()
+class MagneticField : public G4MagneticField
 {
-  delete fStepMaxCmd;
-  delete fStepDir;
-}
+  public:
+    MagneticField();
+    MagneticField(G4double);
+    virtual ~MagneticField();
+    
+    virtual void GetFieldValue(const G4double point[4],double* bField ) const;
+    
+    void SetField(G4double val) { fBz = val; }
+    G4double GetField() const { return fBz; }
+    
+  private:
+    void DefineCommands();
+
+    G4GenericMessenger* fMessenger;
+    G4double fBz;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if (command == fStepMaxCmd)
-    { fStepMax->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue));}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

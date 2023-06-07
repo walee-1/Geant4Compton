@@ -3,7 +3,7 @@
 #include "G4SteppingManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4UnitsTable.hh"
-
+//this class is just to write information of step of a particle if needed.
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingVerbose::SteppingVerbose()
